@@ -32,25 +32,27 @@ func (b Bites) Capacity(s int) Bites {
 }
 
 // Extend b by s, return the complete, extended, slice.
-// This may cause an extra allocation if s is much larger than cap-len.
+// If zero is true, the extension bytes are set to 0, otherwise their content is left as-is.
+// An allocation (new backing array) will occur if s is larger than cap-len.
+// An extra allocation (for a temporary slice) will occur if s is much larger (by 512 bytes) than cap-len.
 func (b Bites) Extend(s int, zero bool) Bites {
 	l := len(b)
 	e := l
 	if l+s <= cap(b) {
-		// Extension fits in cap
+		// Extension fits in cap, no allocation.
 		b = b[:l+s]
 		e += s
 	} else {
 		// Extension does not fit, use up all cap first
 		b = b[:cap(b)]
 		s -= cap(b) - l
-		e = len(b)
+		e = cap(b)
 		if s <= extendShortLen {
-			// Short append, alloc-free
+			// Short append, must allocate new backing array.
 			b = append(b, extendShort[:s]...)
 			e = len(b)
 		} else {
-			// Long append, allocates
+			// Long append, must allocate new backing array and temporary slice.
 			b = append(b, make([]byte, s)...)
 		}
 	}
