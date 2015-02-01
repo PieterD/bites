@@ -43,17 +43,17 @@ func (b Bites) Extend(s int) Bites {
 // If it does not, it has the same performance characteristics as Extend.
 func (b Bites) ExtendLong(s int) Bites {
 	l := len(b)
-	e := len(b)
+	e := l
 	if l+s <= cap(b) {
 		// Extension fits in cap
 		b = b[:l+s]
-		e = len(b)
+		e += s
 	} else {
 		// Extension does not fit, use up all cap first
 		b = b[:cap(b)]
 		s -= cap(b)
 		e = len(b)
-		if s < len(extendShort) {
+		if s < extendShortLen {
 			// Short append, alloc-free
 			b = append(b, extendShort[:s]...)
 			e = len(b)
