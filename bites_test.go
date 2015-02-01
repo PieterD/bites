@@ -23,6 +23,10 @@ func TestCapacity(t *testing.T) {
 	if len(b) != 0 {
 		t.Fatalf("FAIL! Reuse should set len to 0")
 	}
+	b = b.Capacity(10)
+	if cap(b) != 16 {
+		t.Fatalf("FAIL! Short capacity should not change cap")
+	}
 }
 
 func TestExtendShort(t *testing.T) {

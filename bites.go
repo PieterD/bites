@@ -23,12 +23,13 @@ func (b Bites) String() string {
 }
 
 // Returns b with at least s capacity left.
-// TODO: short path
 func (b Bites) Capacity(s int) Bites {
+	if len(b)+s <= cap(b) {
+		return b
+	}
 	orig := len(b)
-	b = append(b, make([]byte, s)...)
-	b = b[:orig]
-	return b
+	b = b.Extend(s, false)
+	return b[:orig]
 }
 
 // Extend b by s, return the complete, extended, slice.
