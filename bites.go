@@ -32,16 +32,8 @@ func (b Bites) Capacity(s int) Bites {
 }
 
 // Extend b by s, return the complete, extended, slice.
-// s must be less than or equal to 512, or Extend will panic.
-// For larger buffers, use ExtendLong.
-func (b Bites) Extend(s int) Bites {
-	return append(b, extendShort[:s]...)
-}
-
-// Extend b by s, return the complete, extended, slice.
 // This may cause an extra allocation if s is much larger than cap-len.
-// If it does not, it has the same performance characteristics as Extend.
-func (b Bites) ExtendLong(s int) Bites {
+func (b Bites) Extend(s int, zero bool) Bites {
 	l := len(b)
 	e := l
 	if l+s <= cap(b) {
@@ -51,9 +43,9 @@ func (b Bites) ExtendLong(s int) Bites {
 	} else {
 		// Extension does not fit, use up all cap first
 		b = b[:cap(b)]
-		s -= cap(b)
+		s -= cap(b) - l
 		e = len(b)
-		if s < extendShortLen {
+		if s <= extendShortLen {
 			// Short append, alloc-free
 			b = append(b, extendShort[:s]...)
 			e = len(b)
@@ -62,9 +54,11 @@ func (b Bites) ExtendLong(s int) Bites {
 			b = append(b, make([]byte, s)...)
 		}
 	}
-	x := b[l:e]
-	for len(x) > 0 {
-		x = x[copy(x, extendShort[:]):]
+	if zero {
+		x := b[l:e]
+		for len(x) > 0 {
+			x = x[copy(x, extendShort[:]):]
+		}
 	}
 	return b
 }
@@ -113,7 +107,7 @@ func (b Bites) PutRune(r rune) Bites {
 	if l == -1 {
 		panic(ErrorInvalidRune(r))
 	}
-	b = b.Extend(l)
+	b = b.Extend(l, false)
 	utf8.EncodeRune(b.Last(l), r)
 	return b
 }

@@ -2,73 +2,10 @@ package bites
 
 import "testing"
 
-func BenchmarkOldExtendShort(b *testing.B) {
+func BenchmarkExtendShort(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		bts := make(Bites, 50)
-		bts = bts.Reuse().Extend(40)
-	}
-}
-
-func BenchmarkOldExtendShortReuse(b *testing.B) {
-	bts := make(Bites, 50)
-	for i := 0; i < b.N; i++ {
-		bts = bts.Reuse().Extend(40)
-	}
-}
-
-func BenchmarkOldExtendMid(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		bts := make(Bites, 50)
-		bts = bts.Reuse().Extend(400)
-	}
-}
-
-func BenchmarkOldExtendMidReuse(b *testing.B) {
-	bts := make(Bites, 50)
-	for i := 0; i < b.N; i++ {
-		bts = bts.Reuse().Extend(400)
-	}
-}
-
-func BenchmarkNewExtendShort(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		bts := make(Bites, 50)
-		bts = bts.Reuse().ExtendLong(40)
-	}
-}
-
-func BenchmarkNewExtendShortReuse(b *testing.B) {
-	bts := make(Bites, 50)
-	for i := 0; i < b.N; i++ {
-		bts = bts.Reuse().ExtendLong(40)
-	}
-}
-
-func BenchmarkNewExtendMid(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		bts := make(Bites, 50)
-		bts = bts.Reuse().ExtendLong(400)
-	}
-}
-
-func BenchmarkNewExtendMidReuse(b *testing.B) {
-	bts := make(Bites, 50)
-	for i := 0; i < b.N; i++ {
-		bts = bts.Reuse().ExtendLong(400)
-	}
-}
-
-func BenchmarkNewExtendLong(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		bts := make(Bites, 50)
-		bts = bts.Reuse().ExtendLong(4000)
-	}
-}
-
-func BenchmarkNewExtendLongReuse(b *testing.B) {
-	bts := make(Bites, 50)
-	for i := 0; i < b.N; i++ {
-		bts = bts.Reuse().ExtendLong(4000)
+		bts = bts.Reuse().Extend(40, true)
 	}
 }
 
@@ -76,7 +13,14 @@ func BenchmarkRussExtendShort(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		bts := make(Bites, 50)
 		bts = bts.Reuse()
-		bts = RussExtend(bts, 40)
+		bts = RussExtend(bts, 40, true)
+	}
+}
+
+func BenchmarkExtendShortReuse(b *testing.B) {
+	bts := make(Bites, 50)
+	for i := 0; i < b.N; i++ {
+		bts = bts.Reuse().Extend(40, true)
 	}
 }
 
@@ -84,7 +28,44 @@ func BenchmarkRussExtendShortReuse(b *testing.B) {
 	bts := make(Bites, 50)
 	for i := 0; i < b.N; i++ {
 		bts = bts.Reuse()
-		bts = RussExtend(bts, 40)
+		bts = RussExtend(bts, 40, true)
+	}
+}
+
+func BenchmarkExtendShortNoZero(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		bts := make(Bites, 50)
+		bts = bts.Reuse().Extend(40, false)
+	}
+}
+
+func BenchmarkRussExtendShortNoZero(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		bts := make(Bites, 50)
+		bts = bts.Reuse()
+		bts = RussExtend(bts, 40, false)
+	}
+}
+
+func BenchmarkExtendShortReuseNoZero(b *testing.B) {
+	bts := make(Bites, 50)
+	for i := 0; i < b.N; i++ {
+		bts = bts.Reuse().Extend(40, false)
+	}
+}
+
+func BenchmarkRussExtendShortReuseNoZero(b *testing.B) {
+	bts := make(Bites, 50)
+	for i := 0; i < b.N; i++ {
+		bts = bts.Reuse()
+		bts = RussExtend(bts, 40, false)
+	}
+}
+
+func BenchmarkExtendMid(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		bts := make(Bites, 50)
+		bts = bts.Reuse().Extend(400, true)
 	}
 }
 
@@ -92,7 +73,14 @@ func BenchmarkRussExtendMid(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		bts := make(Bites, 50)
 		bts = bts.Reuse()
-		bts = RussExtend(bts, 400)
+		bts = RussExtend(bts, 400, true)
+	}
+}
+
+func BenchmarkExtendMidReuse(b *testing.B) {
+	bts := make(Bites, 50)
+	for i := 0; i < b.N; i++ {
+		bts = bts.Reuse().Extend(400, true)
 	}
 }
 
@@ -100,7 +88,44 @@ func BenchmarkRussExtendMidReuse(b *testing.B) {
 	bts := make(Bites, 50)
 	for i := 0; i < b.N; i++ {
 		bts = bts.Reuse()
-		bts = RussExtend(bts, 400)
+		bts = RussExtend(bts, 400, true)
+	}
+}
+
+func BenchmarkExtendMidNoZero(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		bts := make(Bites, 50)
+		bts = bts.Reuse().Extend(400, false)
+	}
+}
+
+func BenchmarkRussExtendMidNoZero(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		bts := make(Bites, 50)
+		bts = bts.Reuse()
+		bts = RussExtend(bts, 400, false)
+	}
+}
+
+func BenchmarkExtendMidReuseNoZero(b *testing.B) {
+	bts := make(Bites, 50)
+	for i := 0; i < b.N; i++ {
+		bts = bts.Reuse().Extend(400, false)
+	}
+}
+
+func BenchmarkRussExtendMidReuseNoZero(b *testing.B) {
+	bts := make(Bites, 50)
+	for i := 0; i < b.N; i++ {
+		bts = bts.Reuse()
+		bts = RussExtend(bts, 400, false)
+	}
+}
+
+func BenchmarkExtendLong(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		bts := make(Bites, 50)
+		bts = bts.Reuse().Extend(4000, true)
 	}
 }
 
@@ -108,7 +133,14 @@ func BenchmarkRussExtendLong(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		bts := make(Bites, 50)
 		bts = bts.Reuse()
-		bts = RussExtend(bts, 4000)
+		bts = RussExtend(bts, 4000, true)
+	}
+}
+
+func BenchmarkExtendLongReuse(b *testing.B) {
+	bts := make(Bites, 50)
+	for i := 0; i < b.N; i++ {
+		bts = bts.Reuse().Extend(4000, true)
 	}
 }
 
@@ -116,16 +148,48 @@ func BenchmarkRussExtendLongReuse(b *testing.B) {
 	bts := make(Bites, 50)
 	for i := 0; i < b.N; i++ {
 		bts = bts.Reuse()
-		bts = RussExtend(bts, 4000)
+		bts = RussExtend(bts, 4000, true)
 	}
 }
 
-func RussExtend(b Bites, n int) Bites {
+func BenchmarkExtendLongNoZero(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		bts := make(Bites, 50)
+		bts = bts.Reuse().Extend(4000, false)
+	}
+}
+
+func BenchmarkRussExtendLongNoZero(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		bts := make(Bites, 50)
+		bts = bts.Reuse()
+		bts = RussExtend(bts, 4000, false)
+	}
+}
+
+func BenchmarkExtendLongReuseNoZero(b *testing.B) {
+	bts := make(Bites, 50)
+	for i := 0; i < b.N; i++ {
+		bts = bts.Reuse().Extend(4000, false)
+	}
+}
+
+func BenchmarkRussExtendLongReuseNoZero(b *testing.B) {
+	bts := make(Bites, 50)
+	for i := 0; i < b.N; i++ {
+		bts = bts.Reuse()
+		bts = RussExtend(bts, 4000, false)
+	}
+}
+
+func RussExtend(b Bites, n int, zero bool) Bites {
 	old := len(b)
 	for cap(b) < old+n {
 		b = append(b[:cap(b)], 0)
 	}
-	b[old : old+n].Zero()
+	if zero {
+		b[old : old+n].Zero()
+	}
 	return b[:old+n]
 }
 
@@ -144,7 +208,7 @@ func doStuff(bts Bites, b *testing.B) Bites {
 	bts = bts.PutSlice(hash[:])
 	bts = bts.PutByte(4)
 	bts = bts.PutByte(4)
-	bts = bts.Extend(10)
+	bts = bts.Extend(10, true)
 	bts = bts.PutInt16(12)
 	bts = bts.PutUint16(250)
 	bts = bts.PutInt16LE(-12)
