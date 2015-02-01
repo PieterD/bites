@@ -9,11 +9,10 @@ func BenchmarkExtendShort(b *testing.B) {
 	}
 }
 
-func BenchmarkRussExtendShort(b *testing.B) {
+func BenchmarkExtendShortNoZero(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		bts := make(Bites, 50)
-		bts = bts.Reuse()
-		bts = RussExtend(bts, 40, true)
+		bts = bts.Reuse().Extend(40, false)
 	}
 }
 
@@ -24,41 +23,10 @@ func BenchmarkExtendShortReuse(b *testing.B) {
 	}
 }
 
-func BenchmarkRussExtendShortReuse(b *testing.B) {
-	bts := make(Bites, 50)
-	for i := 0; i < b.N; i++ {
-		bts = bts.Reuse()
-		bts = RussExtend(bts, 40, true)
-	}
-}
-
-func BenchmarkExtendShortNoZero(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		bts := make(Bites, 50)
-		bts = bts.Reuse().Extend(40, false)
-	}
-}
-
-func BenchmarkRussExtendShortNoZero(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		bts := make(Bites, 50)
-		bts = bts.Reuse()
-		bts = RussExtend(bts, 40, false)
-	}
-}
-
 func BenchmarkExtendShortReuseNoZero(b *testing.B) {
 	bts := make(Bites, 50)
 	for i := 0; i < b.N; i++ {
 		bts = bts.Reuse().Extend(40, false)
-	}
-}
-
-func BenchmarkRussExtendShortReuseNoZero(b *testing.B) {
-	bts := make(Bites, 50)
-	for i := 0; i < b.N; i++ {
-		bts = bts.Reuse()
-		bts = RussExtend(bts, 40, false)
 	}
 }
 
@@ -69,11 +37,10 @@ func BenchmarkExtendMid(b *testing.B) {
 	}
 }
 
-func BenchmarkRussExtendMid(b *testing.B) {
+func BenchmarkExtendMidNoZero(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		bts := make(Bites, 50)
-		bts = bts.Reuse()
-		bts = RussExtend(bts, 400, true)
+		bts = bts.Reuse().Extend(400, false)
 	}
 }
 
@@ -84,41 +51,10 @@ func BenchmarkExtendMidReuse(b *testing.B) {
 	}
 }
 
-func BenchmarkRussExtendMidReuse(b *testing.B) {
-	bts := make(Bites, 50)
-	for i := 0; i < b.N; i++ {
-		bts = bts.Reuse()
-		bts = RussExtend(bts, 400, true)
-	}
-}
-
-func BenchmarkExtendMidNoZero(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		bts := make(Bites, 50)
-		bts = bts.Reuse().Extend(400, false)
-	}
-}
-
-func BenchmarkRussExtendMidNoZero(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		bts := make(Bites, 50)
-		bts = bts.Reuse()
-		bts = RussExtend(bts, 400, false)
-	}
-}
-
 func BenchmarkExtendMidReuseNoZero(b *testing.B) {
 	bts := make(Bites, 50)
 	for i := 0; i < b.N; i++ {
 		bts = bts.Reuse().Extend(400, false)
-	}
-}
-
-func BenchmarkRussExtendMidReuseNoZero(b *testing.B) {
-	bts := make(Bites, 50)
-	for i := 0; i < b.N; i++ {
-		bts = bts.Reuse()
-		bts = RussExtend(bts, 400, false)
 	}
 }
 
@@ -129,11 +65,10 @@ func BenchmarkExtendLong(b *testing.B) {
 	}
 }
 
-func BenchmarkRussExtendLong(b *testing.B) {
+func BenchmarkExtendLongNoZero(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		bts := make(Bites, 50)
-		bts = bts.Reuse()
-		bts = RussExtend(bts, 4000, true)
+		bts = bts.Reuse().Extend(4000, false)
 	}
 }
 
@@ -144,53 +79,11 @@ func BenchmarkExtendLongReuse(b *testing.B) {
 	}
 }
 
-func BenchmarkRussExtendLongReuse(b *testing.B) {
-	bts := make(Bites, 50)
-	for i := 0; i < b.N; i++ {
-		bts = bts.Reuse()
-		bts = RussExtend(bts, 4000, true)
-	}
-}
-
-func BenchmarkExtendLongNoZero(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		bts := make(Bites, 50)
-		bts = bts.Reuse().Extend(4000, false)
-	}
-}
-
-func BenchmarkRussExtendLongNoZero(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		bts := make(Bites, 50)
-		bts = bts.Reuse()
-		bts = RussExtend(bts, 4000, false)
-	}
-}
-
 func BenchmarkExtendLongReuseNoZero(b *testing.B) {
 	bts := make(Bites, 50)
 	for i := 0; i < b.N; i++ {
 		bts = bts.Reuse().Extend(4000, false)
 	}
-}
-
-func BenchmarkRussExtendLongReuseNoZero(b *testing.B) {
-	bts := make(Bites, 50)
-	for i := 0; i < b.N; i++ {
-		bts = bts.Reuse()
-		bts = RussExtend(bts, 4000, false)
-	}
-}
-
-func RussExtend(b Bites, n int, zero bool) Bites {
-	old := len(b)
-	for cap(b) < old+n {
-		b = append(b[:cap(b)], 0)
-	}
-	if zero {
-		b[old : old+n].Zero()
-	}
-	return b[:old+n]
 }
 
 func BenchmarkEverything(b *testing.B) {

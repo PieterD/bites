@@ -2,6 +2,7 @@ package bites
 
 import "bytes"
 
+// Bites' purpose is to give byte slices some useful methods.
 type Bites []byte
 
 const extendShortLen = 512
