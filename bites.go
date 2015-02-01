@@ -7,7 +7,9 @@ import (
 
 type Bites []byte
 
-var extendShort [512]byte
+const extendShortLen = 512
+
+var extendShort [extendShortLen]byte
 
 // Returns an empty slice.
 func Empty() Bites {
