@@ -39,18 +39,17 @@ func (b Bites) Extend(s int, zero bool) Bites {
 	l := len(b)
 	e := l
 	if l+s <= cap(b) {
-		// Extension fits in cap, no allocation.
+		// Short append; extension fits in cap, no allocation.
 		b = b[:l+s]
 		e += s
 	} else {
 		// Extension does not fit, use up all cap first
-		b = b[:cap(b)]
-		s -= cap(b) - l
 		e = cap(b)
+		b = b[:e]
+		s -= e - l
 		if s <= extendShortLen {
-			// Short append, must allocate new backing array.
+			// Mid append, must allocate new backing array.
 			b = append(b, extendShort[:s]...)
-			e = len(b)
 		} else {
 			// Long append, must allocate new backing array and temporary slice.
 			b = append(b, make([]byte, s)...)
