@@ -23,12 +23,62 @@ func TestCapacity(t *testing.T) {
 	if len(b) != 0 {
 		t.Fatalf("FAIL! Reuse should set len to 0")
 	}
-	b = b.ExtendLong(1024)
-	if cap(b) != 1024 {
-		t.Fatalf("FAIL! ExtendLong should set cap to 1024, was %d", cap(b))
+}
+
+func TestExtendShort(t *testing.T) {
+	b := make(Bites, 50).Set(1)
+	for i := range b {
+		if b[i] != 1 {
+			t.Fatalf("FAIL! Set did not set everything")
+		}
 	}
-	if len(b) != 1024 {
-		t.Fatalf("FAIL! ExtendLong should set len to 1024, was %d", len(b))
+
+	origcap := cap(b)
+	b = b.Reuse().ExtendLong(20)
+	if cap(b) != origcap {
+		t.Fatalf("FAIL! Short extend changed cap")
+	}
+	if len(b) != 20 {
+		t.Fatalf("FAIL! Short extend did not set len properly, got %d expect %d", len(b), 20)
+	}
+	for i := range b {
+		if b[i] != 0 {
+			t.Fatalf("FAIL! Short extend did not set everything to 0")
+		}
+	}
+}
+
+func TestExtendMid(t *testing.T) {
+	b := make(Bites, 50).Set(1)
+	origcap := cap(b)
+	b = b.Reuse().ExtendLong(500)
+	if cap(b) == origcap {
+		t.Fatalf("FAIL! Mid extend did not change cap")
+	}
+	if len(b) != 500 {
+		t.Fatalf("FAIL! Mid extend did not set len properly, got %d expect %d", len(b), 500)
+	}
+	for i := range b {
+		if b[i] != 0 {
+			t.Fatalf("FAIL! Mid extend did not set everything to 0")
+		}
+	}
+}
+
+func TestExtendLong(t *testing.T) {
+	b := make(Bites, 50).Set(1)
+	origcap := cap(b)
+	b = b.Reuse().ExtendLong(5000)
+	if cap(b) == origcap {
+		t.Fatalf("FAIL! Long extend did not change cap")
+	}
+	if len(b) != 5000 {
+		t.Fatalf("FAIL! Long extend did not set len properly, got %d expect %d", len(b), 5000)
+	}
+	for i := range b {
+		if b[i] != 0 {
+			t.Fatalf("FAIL! Long extend did not set everything to 0")
+		}
 	}
 }
 

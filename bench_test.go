@@ -2,7 +2,42 @@ package bites
 
 import "testing"
 
-func BenchmarkAppendAlloc(b *testing.B) {
+func BenchmarkOldExtendShort(b *testing.B) {
+	bts := make(Bites, 50)
+	for i := 0; i < b.N; i++ {
+		bts = bts.Reuse().Extend(40)
+	}
+}
+
+func BenchmarkOldExtendMid(b *testing.B) {
+	bts := make(Bites, 50)
+	for i := 0; i < b.N; i++ {
+		bts = bts.Reuse().Extend(400)
+	}
+}
+
+func BenchmarkNewExtendShort(b *testing.B) {
+	bts := make(Bites, 50)
+	for i := 0; i < b.N; i++ {
+		bts = bts.Reuse().ExtendLong(40)
+	}
+}
+
+func BenchmarkNewExtendMid(b *testing.B) {
+	bts := make(Bites, 50)
+	for i := 0; i < b.N; i++ {
+		bts = bts.Reuse().ExtendLong(400)
+	}
+}
+
+func BenchmarkNewExtendLong(b *testing.B) {
+	bts := make(Bites, 50)
+	for i := 0; i < b.N; i++ {
+		bts = bts.Reuse().ExtendLong(4000)
+	}
+}
+
+func BenchmarkEverything(b *testing.B) {
 	bts := Empty()
 	for i := 0; i < b.N; i++ {
 		bts = doStuff(bts, b)
