@@ -100,12 +100,34 @@ func TestSlicing(t *testing.T) {
 }
 
 func TestSimplePutString(t *testing.T) {
-	b := Empty().PutString("Hello").PutByte(',').PutRune(' ').PutSlice([]byte("world!"))
+	b := Empty().PutString("Hello").PutByte(',').PutRune(' ', nil).PutSlice([]byte("world!"))
 	if b.String() != "Hello, world!" {
 		t.Fatalf("FAIL! Expected 'Hello, world!', got '%s'", b.String())
 	}
 	if !b.Sequal("Hello, world!") {
 		t.Fatalf("FAIL! Not equal to 'Hello, world!', got '%s'", b.String())
+	}
+}
+
+func TestRune(t *testing.T) {
+	b := Empty().PutString("世界!")
+	var r1, r2, r3 rune
+	var s1, s3 int
+	b.GetRune(&r1, &s1).GetRune(&r2, nil).GetRune(&r3, &s3)
+	if r1 != '世' {
+		t.Fatalf("First rune mismatch: expected %d, got %d", '世', r1)
+	}
+	if r2 != '界' {
+		t.Fatalf("Second rune mismatch: expected %d, got %d", '界', r2)
+	}
+	if r3 != '!' {
+		t.Fatalf("Third rune mismatch: expected %d, got %d", '!', r3)
+	}
+	if s1 != 3 {
+		t.Fatalf("Invalid rune size: %d expected %d", s1, 3)
+	}
+	if s3 != 1 {
+		t.Fatalf("Invalid rune size: %d expected %d", s3, 1)
 	}
 }
 
@@ -124,7 +146,7 @@ func TestPanicOnBadRune(t *testing.T) {
 			err = nil
 			return
 		}()
-		Empty().PutRune(2000000000)
+		Empty().PutRune(2000000000, nil)
 		return nil
 	}()
 	if err == nil {

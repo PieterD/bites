@@ -1,9 +1,6 @@
 package bites
 
-import (
-	"bytes"
-	"unicode/utf8"
-)
+import "bytes"
 
 type Bites []byte
 
@@ -70,52 +67,8 @@ func (b Bites) Reuse() Bites {
 	return b[:0]
 }
 
-// Append the given slice.
-func (b Bites) PutSlice(slice []byte) Bites {
-	return append(b, slice...)
-}
-
-// Get a slice of the given size.
-func (b Bites) GetSlice(slice *[]byte, size int) Bites {
-	*slice = b[:size]
-	return b[size:]
-}
-
-// Get a slice of the given size.
-func (b Bites) GetSliceCopy(slice []byte) Bites {
-	return b[copy(slice, b):]
-}
-
-// Append the given string.
-func (b Bites) PutString(str string) Bites {
-	return append(b, str...)
-}
-
-// Append one byte.
-func (b Bites) PutByte(byt byte) Bites {
-	return append(b, byt)
-}
-
-// Get one byte.
-func (b Bites) GetByte(byt *byte) Bites {
-	*byt = b[0]
-	return b[1:]
-}
-
-// Append the given rune as UTF8.
-// If the rune is not valid UTF8, it panics with an ErrorInvalidRune.
-func (b Bites) PutRune(r rune) Bites {
-	l := utf8.RuneLen(r)
-	if l == -1 {
-		panic(ErrorInvalidRune(r))
-	}
-	b = b.Extend(l, false)
-	utf8.EncodeRune(b.Last(l), r)
-	return b
-}
-
-// Make an exact copy and return it.
-// This will almost certainly be allocated on the heap.
+// Make an exact copy of b and return it.
+// This will allocate.
 func (b Bites) Clone() Bites {
 	clone := make(Bites, len(b), len(b))
 	copy(clone, b)
