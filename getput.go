@@ -13,6 +13,44 @@ func (b Bites) GetByte(byt *byte) Bites {
 	return b[1:]
 }
 
+// Append a list of bools.
+// The bools are set as bits consolidated into bytes,
+// and are stored in the same order as they are given.
+// This means that if there is a single true given,
+// the byte appended will have the value 128.
+func (b Bites) PutBool(bools ...bool) Bites {
+	bytenum := len(bools)/8 + 1
+	b = b.Extend(bytenum, true)
+	bts := b.Last(bytenum)
+	for i, bol := range bools {
+		v := byte(0)
+		if bol {
+			v = 1
+		}
+		v = v << uint(7-(i&7))
+		bts[i/8] = bts[i/8] | v
+	}
+	return b
+}
+
+// Get a list of bools.
+// The bools are interpreted as though they were written by PutBool.
+// If a bool is nil, that bit is skipped.
+func (b Bites) GetBool(bools ...*bool) Bites {
+	bytenum := len(bools)/8 + 1
+	for i, bol := range bools {
+		v := b[i/8] >> uint(7-(i&7)) & 1
+		if bol != nil {
+			if v == 1 {
+				*bol = true
+			} else {
+				*bol = false
+			}
+		}
+	}
+	return b[bytenum:]
+}
+
 // Append the given rune as UTF8.
 // If the rune is not valid UTF8, it panics with an error of type ErrorInvalidRune.
 func (b Bites) PutRune(r rune, s *int) Bites {

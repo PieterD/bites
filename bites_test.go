@@ -189,3 +189,21 @@ func TestSplit(t *testing.T) {
 		t.Fatalf("FAIL! Second part of split is wrong, expected '987654' got %d", b2.String())
 	}
 }
+
+func TestBool(t *testing.T) {
+	b := Empty().PutBool(true, false, false, true, true, false, false, true, true, false, true)
+	if len(b) != 2 {
+		t.Fatalf("FAIL! Expected size 2, got %d", len(b))
+	}
+	if b[0] != 153 || b[1] != 160 {
+		t.Fatalf("FAIL! Expected 153 and 160, got %d and %d", b[0], b[1])
+	}
+	var b1, b2, b3, b6, b7, b8, b9, b10, b11 bool
+	b = b.GetBool(&b1, &b2, &b3, nil, nil, &b6, &b7, &b8, &b9, &b10, &b11)
+	if len(b) != 0 {
+		t.Fatalf("FAIL! GetBool didn't snip")
+	}
+	if b1 != true || b2 != false || b3 != false || b6 != false || b7 != false || b8 != true || b9 != true || b10 != false || b11 != true {
+		t.Fatalf("FAIL! Bad booleans returned")
+	}
+}
