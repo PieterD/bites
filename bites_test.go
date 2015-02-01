@@ -12,7 +12,7 @@ func TestCapacity(t *testing.T) {
 	if cap(b) != 16 {
 		t.Fatalf("FAIL! Expected cap 16, got cap %d", cap(b))
 	}
-	b = b.Extend(16, true)
+	b = b.Extend(16)
 	if cap(b) != 16 || len(b) != 16 {
 		t.Fatalf("FAIL! Invalid len(%d) or cap(%d), expected 16 for both", len(b), cap(b))
 	}
@@ -38,51 +38,36 @@ func TestExtendShort(t *testing.T) {
 	}
 
 	origcap := cap(b)
-	b = b.Reuse().Extend(20, true)
+	b = b.Reuse().Extend(20)
 	if cap(b) != origcap {
 		t.Fatalf("FAIL! Short extend changed cap")
 	}
 	if len(b) != 20 {
 		t.Fatalf("FAIL! Short extend did not set len properly, got %d expect %d", len(b), 20)
 	}
-	for i := range b {
-		if b[i] != 0 {
-			t.Fatalf("FAIL! Short extend did not set everything to 0")
-		}
-	}
 }
 
 func TestExtendMid(t *testing.T) {
 	b := make(Bites, 50).Set(1)
 	origcap := cap(b)
-	b = b.Reuse().Extend(500, true)
+	b = b.Reuse().Extend(500)
 	if cap(b) == origcap {
 		t.Fatalf("FAIL! Mid extend did not change cap")
 	}
 	if len(b) != 500 {
 		t.Fatalf("FAIL! Mid extend did not set len properly, got %d expect %d", len(b), 500)
 	}
-	for i := range b {
-		if b[i] != 0 {
-			t.Fatalf("FAIL! Mid extend did not set everything to 0")
-		}
-	}
 }
 
 func TestExtendLong(t *testing.T) {
 	b := make(Bites, 50).Set(1)
 	origcap := cap(b)
-	b = b.Reuse().Extend(5000, true)
+	b = b.Reuse().Extend(5000)
 	if cap(b) == origcap {
 		t.Fatalf("FAIL! Long extend did not change cap")
 	}
 	if len(b) != 5000 {
 		t.Fatalf("FAIL! Long extend did not set len properly, got %d expect %d", len(b), 5000)
-	}
-	for i := range b {
-		if b[i] != 0 {
-			t.Fatalf("FAIL! Long extend did not set everything to 0")
-		}
 	}
 }
 

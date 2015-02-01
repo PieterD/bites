@@ -3,6 +3,8 @@ package bites
 import "bytes"
 
 // Bites' purpose is to give byte slices some useful methods.
+// The Put methods append things, and return the updated slice.
+// The Get methods snip things off the front, and return the remainder of the slice.
 type Bites []byte
 
 const extendShortLen = 512
@@ -26,39 +28,20 @@ func (b Bites) Capacity(s int) Bites {
 		return b
 	}
 	orig := len(b)
-	b = b.Extend(s, false)
+	b = b.Extend(s)
 	return b[:orig]
 }
 
-// Extend b by s, return the complete, extended, slice.
-// If zero is true, the extension bytes are set to 0, otherwise their content is left as-is.
+// Extend b by s, return the complete, extended, slice. The extension may contain garbage.
 // An allocation (new backing array) will occur if s is larger than cap-len.
-// An extra allocation (for a temporary slice) will occur if s is much larger (by 512 bytes) than cap-len.
-func (b Bites) Extend(s int, zero bool) Bites {
+func (b Bites) Extend(s int) Bites {
 	l := len(b)
-	e := l
 	if l+s <= cap(b) {
-		// Short append; extension fits in cap, no allocation.
 		b = b[:l+s]
-		e += s
 	} else {
-		// Extension does not fit, use up all cap first
-		e = cap(b)
-		b = b[:e]
-		s -= e - l
-		if s <= extendShortLen {
-			// Mid append, must allocate new backing array.
-			b = append(b, extendShort[:s]...)
-		} else {
-			// Long append, must allocate new backing array and temporary slice.
-			b = append(b, make([]byte, s)...)
-		}
-	}
-	if zero {
-		x := b[l:e]
-		for len(x) > 0 {
-			x = x[copy(x, extendShort[:]):]
-		}
+		ob := b
+		b = make([]byte, len(b)+s)
+		copy(b, ob)
 	}
 	return b
 }

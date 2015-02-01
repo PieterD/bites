@@ -5,84 +5,42 @@ import "testing"
 func BenchmarkExtendShort(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		bts := make(Bites, 50)
-		bts = bts.Reuse().Extend(40, true)
-	}
-}
-
-func BenchmarkExtendShortNoZero(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		bts := make(Bites, 50)
-		bts = bts.Reuse().Extend(40, false)
+		bts = bts.Reuse().Extend(40)
 	}
 }
 
 func BenchmarkExtendShortReuse(b *testing.B) {
 	bts := make(Bites, 50)
 	for i := 0; i < b.N; i++ {
-		bts = bts.Reuse().Extend(40, true)
-	}
-}
-
-func BenchmarkExtendShortReuseNoZero(b *testing.B) {
-	bts := make(Bites, 50)
-	for i := 0; i < b.N; i++ {
-		bts = bts.Reuse().Extend(40, false)
+		bts = bts.Reuse().Extend(40)
 	}
 }
 
 func BenchmarkExtendMid(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		bts := make(Bites, 50)
-		bts = bts.Reuse().Extend(400, true)
-	}
-}
-
-func BenchmarkExtendMidNoZero(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		bts := make(Bites, 50)
-		bts = bts.Reuse().Extend(400, false)
+		bts = bts.Reuse().Extend(400)
 	}
 }
 
 func BenchmarkExtendMidReuse(b *testing.B) {
 	bts := make(Bites, 50)
 	for i := 0; i < b.N; i++ {
-		bts = bts.Reuse().Extend(400, true)
-	}
-}
-
-func BenchmarkExtendMidReuseNoZero(b *testing.B) {
-	bts := make(Bites, 50)
-	for i := 0; i < b.N; i++ {
-		bts = bts.Reuse().Extend(400, false)
+		bts = bts.Reuse().Extend(400)
 	}
 }
 
 func BenchmarkExtendLong(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		bts := make(Bites, 50)
-		bts = bts.Reuse().Extend(4000, true)
-	}
-}
-
-func BenchmarkExtendLongNoZero(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		bts := make(Bites, 50)
-		bts = bts.Reuse().Extend(4000, false)
+		bts = bts.Reuse().Extend(4000)
 	}
 }
 
 func BenchmarkExtendLongReuse(b *testing.B) {
 	bts := make(Bites, 50)
 	for i := 0; i < b.N; i++ {
-		bts = bts.Reuse().Extend(4000, true)
-	}
-}
-
-func BenchmarkExtendLongReuseNoZero(b *testing.B) {
-	bts := make(Bites, 50)
-	for i := 0; i < b.N; i++ {
-		bts = bts.Reuse().Extend(4000, false)
+		bts = bts.Reuse().Extend(4000)
 	}
 }
 
@@ -101,7 +59,7 @@ func doStuff(bts Bites, b *testing.B) Bites {
 	bts = bts.PutSlice(hash[:])
 	bts = bts.PutByte(4)
 	bts = bts.PutByte(4)
-	bts = bts.Extend(10, true)
+	bts = bts.Extend(10)
 	bts = bts.PutInt16(12)
 	bts = bts.PutUint16(250)
 	bts = bts.PutInt16LE(-12)

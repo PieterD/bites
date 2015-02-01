@@ -20,7 +20,8 @@ func (b Bites) GetByte(byt *byte) Bites {
 // the byte appended will have the value 128.
 func (b Bites) PutBool(bools ...bool) Bites {
 	bytenum := len(bools)/8 + 1
-	b = b.Extend(bytenum, true)
+	b = b.Extend(bytenum)
+	b.Last(bytenum).Zero()
 	bts := b.Last(bytenum)
 	for i, bol := range bools {
 		v := byte(0)
@@ -58,7 +59,7 @@ func (b Bites) PutRune(r rune, s *int) Bites {
 	if l == -1 {
 		panic(ErrorInvalidRune(r))
 	}
-	b = b.Extend(l, false)
+	b = b.Extend(l)
 	utf8.EncodeRune(b.Last(l), r)
 	if s != nil {
 		*s = l
