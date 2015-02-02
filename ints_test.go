@@ -105,3 +105,22 @@ func TestBits64(t *testing.T) {
 		t.Fatalf("Wrong Put/Get uint64: %d", u1)
 	}
 }
+
+func TestFloat(t *testing.T) {
+	f1 := float64(0.51234)
+	f2 := float32(9124.9876)
+	f3 := complex(float32(1.543), float32(9.876))
+	f4 := complex(float64(543.12), float64(91235.121))
+	var r1 float64
+	var r2 float32
+	var r3 complex64
+	var r4 complex128
+	b := Empty().PutFloat64(f1).PutFloat32(f2).PutComplex64(f3).PutComplex128(f4)
+	b.GetFloat64(&r1).GetFloat32(&r2).GetComplex64(&r3).GetComplex128(&r4)
+	if f1 != r1 || f2 != r2 {
+		t.Fatalf("Put/get float failed")
+	}
+	if f3 != r3 || f4 != f4 {
+		t.Fatalf("Put/get complex failed")
+	}
+}

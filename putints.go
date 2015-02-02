@@ -1,6 +1,9 @@
 package bites
 
-import "encoding/binary"
+import (
+	"encoding/binary"
+	"math"
+)
 
 func (b Bites) PutInt8(i int8) Bites {
 	return append(b, byte(i))
@@ -47,6 +50,30 @@ func (b Bites) PutUint64(i uint64) Bites {
 }
 func (b Bites) PutUint64LE(i uint64) Bites {
 	return append(b, byte(i), byte(i>>8), byte(i>>16), byte(i>>24), byte(i>>32), byte(i>>40), byte(i>>48), byte(i>>56))
+}
+
+func (b Bites) PutFloat32(f float32) Bites {
+	bits := math.Float32bits(f)
+	b = b.PutUint32(bits)
+	return b
+}
+
+func (b Bites) PutFloat64(f float64) Bites {
+	bits := math.Float64bits(f)
+	b = b.PutUint64(bits)
+	return b
+}
+
+func (b Bites) PutComplex64(f complex64) Bites {
+	r := real(f)
+	i := imag(f)
+	return b.Capacity(8).PutFloat32(r).PutFloat32(i)
+}
+
+func (b Bites) PutComplex128(f complex128) Bites {
+	r := real(f)
+	i := imag(f)
+	return b.Capacity(16).PutFloat64(r).PutFloat64(i)
 }
 
 func (b Bites) PutVarInt(i int64, size *int) Bites {

@@ -1,6 +1,9 @@
 package bites
 
-import "encoding/binary"
+import (
+	"encoding/binary"
+	"math"
+)
 
 func (b Bites) GetInt8(i *int8) Bites {
 	*i = int8(b[0])
@@ -61,6 +64,34 @@ func (b Bites) GetUint64(ip *uint64) Bites {
 func (b Bites) GetUint64LE(ip *uint64) Bites {
 	*ip = uint64(b[7])<<56 + uint64(b[6])<<48 + uint64(b[5])<<40 + uint64(b[4])<<32 + uint64(b[3])<<24 + uint64(b[2])<<16 + uint64(b[1])<<8 + uint64(b[0])
 	return b[8:]
+}
+
+func (b Bites) GetFloat32(f *float32) Bites {
+	var bits uint32
+	b = b.GetUint32(&bits)
+	*f = math.Float32frombits(bits)
+	return b
+}
+
+func (b Bites) GetFloat64(f *float64) Bites {
+	var bits uint64
+	b = b.GetUint64(&bits)
+	*f = math.Float64frombits(bits)
+	return b
+}
+
+func (b Bites) GetComplex64(f *complex64) Bites {
+	var r, i float32
+	b = b.GetFloat32(&r).GetFloat32(&i)
+	*f = complex(r, i)
+	return b
+}
+
+func (b Bites) GetComplex128(f *complex128) Bites {
+	var r, i float64
+	b = b.GetFloat64(&r).GetFloat64(&i)
+	*f = complex(r, i)
+	return b
 }
 
 func (b Bites) GetVarInt(i *int64, size *int) Bites {

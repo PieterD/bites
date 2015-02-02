@@ -51,7 +51,16 @@ func BenchmarkEverything(b *testing.B) {
 	}
 }
 
-func doStuff(bts Bites, b *testing.B) Bites {
+type failer interface {
+	Fail()
+}
+
+func TestEverything(t *testing.T) {
+	bts := Empty()
+	doStuff(bts, t)
+}
+
+func doStuff(bts Bites, f failer) Bites {
 	var hash [32]byte
 	//return bts.Reuse().PutString("hello").PutSlice(hash[:]).PutByte(4).PutByte(4).PutVar(5)
 	bts = bts.Reuse()
@@ -70,6 +79,8 @@ func doStuff(bts Bites, b *testing.B) Bites {
 	bts = bts.PutInt64(2000000000 * 1000000000)
 	bts = bts.PutVar(1)
 	bts = bts.PutVar(1000000000)
+	bts = bts.PutComplex64(987.654 + 123.456i)
+	bts = bts.PutComplex128(123.456 + 987.654i)
 
 	rv := bts
 
@@ -81,57 +92,67 @@ func doStuff(bts Bites, b *testing.B) Bites {
 	var u32 uint32
 	var u64 uint64
 	var s64, v64 int64
+	var c64 complex64
+	var c128 complex128
 	var size int
 	bts = bts.GetSlice(&helloSlice, 5)
 	bts = bts.GetSliceCopy(hash[:])
 	bts = bts.GetByte(&b1)
 	if b1 != 4 {
-		b.Fail()
+		f.Fail()
 	}
 	bts = bts.GetByte(&b2)
 	if b2 != 4 {
-		b.Fail()
+		f.Fail()
 	}
 	bts = bts.Skip(10)
 	bts = bts.GetInt16(&s16)
 	if s16 != 12 {
-		b.Fail()
+		f.Fail()
 	}
 	bts = bts.GetUint16(&u16)
 	if u16 != 250 {
-		b.Fail()
+		f.Fail()
 	}
 	bts = bts.GetInt16LE(&s16)
 	if s16 != -12 {
-		b.Fail()
+		f.Fail()
 	}
 	bts = bts.GetUint16LE(&u16)
 	if u16 != 2 {
-		b.Fail()
+		f.Fail()
 	}
 	bts = bts.GetInt32(&s32)
 	if s32 != 2000000000 {
-		b.Fail()
+		f.Fail()
 	}
 	bts = bts.GetUint32LE(&u32)
 	if u32 != 4000000000 {
-		b.Fail()
+		f.Fail()
 	}
 	bts = bts.GetUint64LE(&u64)
 	if u64 != 3000000000*4000000000 {
-		b.Fail()
+		f.Fail()
 	}
 	bts = bts.GetInt64(&s64)
 	if s64 != 2000000000*1000000000 {
-		b.Fail()
+		f.Fail()
 	}
 	bts = bts.GetVarInt(&v64, &size)
 	if v64 != 1 || size != 1 {
-		b.Fail()
+		f.Fail()
 	}
 	bts = bts.GetVarInt(&v64, &size)
 	if v64 != 1000000000 || size != 5 {
-		b.Fail()
+		f.Fail()
+	}
+	bts = bts.GetComplex64(&c64)
+	if c64 != 987.654+123.456i {
+		f.Fail()
+	}
+	bts = bts.GetComplex128(&c128)
+	if c128 != 123.456+987.654i {
+		f.Fail()
 	}
 	return rv
 }
