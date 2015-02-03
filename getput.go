@@ -86,11 +86,6 @@ func (b Bites) PutSlice(slice []byte) Bites {
 	return append(b, slice...)
 }
 
-// Append the given string.
-func (b Bites) PutString(str string) Bites {
-	return append(b, str...)
-}
-
 // Get a slice of the given size.
 func (b Bites) GetSlice(slice *[]byte, size int) Bites {
 	*slice = b[:size]
@@ -100,4 +95,18 @@ func (b Bites) GetSlice(slice *[]byte, size int) Bites {
 // Copy b to slice, and return what's left of b.
 func (b Bites) GetSliceCopy(slice []byte) Bites {
 	return b[copy(slice, b):]
+}
+
+// Append the given string.
+func (b Bites) PutString(str string) Bites {
+	return append(b, str...)
+}
+
+// Get a string of the given size.
+// This allocates.
+func (b Bites) GetString(str *string, size int) Bites {
+	var slice []byte
+	b = GetSlice(&slice, size)
+	*str = string(slice)
+	return b
 }
