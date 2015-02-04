@@ -96,9 +96,13 @@ func (b Bites) GetSlice(slice *[]byte, size int) Bites {
 }
 
 // Copy b to slice, and return what's left of b.
-//TODO: size pointer argument or panic. We will want to know if the slice was not fully filled.
+// If there's not enough in b to fill the slize, panic with ErrSliceEOF.
 func (b Bites) GetSliceCopy(slice []byte) Bites {
-	return b[copy(slice, b):]
+	s := copy(slice, b)
+	if len(slice) > s {
+		panic(ErrSliceEOF)
+	}
+	return b[s:]
 }
 
 // Append the given string.
@@ -108,7 +112,11 @@ func (b Bites) PutString(str string) Bites {
 
 // Get a string of the given size.
 // This allocates.
+// If there's not enough in b to read the full string, panic with ErrSliceEOF.
 func (b Bites) GetString(str *string, size int) Bites {
+	if len(b) < size {
+		panic(ErrSliceEOF)
+	}
 	var slice []byte
 	b = b.GetSlice(&slice, size)
 	*str = string(slice)

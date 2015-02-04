@@ -36,3 +36,11 @@ type ErrorExpectString struct {
 func (err ErrorExpectString) Error() string {
 	return fmt.Sprintf("Expected %s (%s), got (%s)", "string", err.Exp, err.Got)
 }
+
+type ErrorExpectSlice struct {
+	Exp, Got []byte
+}
+
+func (err ErrorExpectSlice) Error() string {
+	return fmt.Sprintf("Expected %s (%#v), got (%#v)", "[]byte", err.Exp, err.Got)
+}

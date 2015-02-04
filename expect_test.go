@@ -1,15 +1,20 @@
 package bites
 
-import (
-	"reflect"
-	"testing"
-)
+import "testing"
 
 func TestExpectByteRuneString(t *testing.T) {
 	b := Empty().PutString("Hello 世!")
 	b = b.ExpectByte('H').ExpectRune('e').ExpectString("llo ").ExpectRune('世').ExpectByte('!')
 	if len(b) != 0 {
 		t.Fatalf("FAIL! Expects did not consume the whole string")
+	}
+}
+
+func TestExpectByteSlice(t *testing.T) {
+	slice := []byte("Hello")
+	b := Empty().PutString("Hello world").ExpectSlice(slice)
+	if len(b) != 6 {
+		t.Fatalf("FAIL! ExpectSlice consumed the wrong amount")
 	}
 }
 
@@ -30,23 +35,9 @@ func TestExpectFail(t *testing.T) {
 		defer catch(t, ErrSliceEOF)
 		Empty().PutString("str").ExpectString("String")
 	}()
-}
-
-func catch(t *testing.T, expect error) {
-	e := recover()
-	if e == nil {
-		t.Fatalf("Expected panic: %#v", expect)
-		return
-	}
-	got, ok := e.(error)
-	if !ok {
-		panic(e)
-	}
-
-	if reflect.TypeOf(got) != reflect.TypeOf(expect) {
-		t.Fatalf("Expected panic %#v, got %#v", expect, got)
-	}
-	if !reflect.DeepEqual(got, expect) {
-		t.Fatalf("Expected panic %#v, got %#v", expect, got)
-	}
+	func() {
+		slice := []byte("Hello")
+		defer catch(t, ErrorExpectSlice{Exp: slice, Got: []byte("hello")})
+		Empty().PutString("hello world").ExpectSlice(slice)
+	}()
 }

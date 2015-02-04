@@ -84,7 +84,7 @@ func TestSlicing(t *testing.T) {
 	}
 }
 
-func TestSimplePutString(t *testing.T) {
+func TestSimpleString(t *testing.T) {
 	b := Empty().PutString("Hello").PutByte(',').PutRune(' ', nil).PutSlice([]byte("world!"))
 	if b.String() != "Hello, world!" {
 		t.Fatalf("FAIL! Expected 'Hello, world!', got '%s'", b.String())
@@ -92,10 +92,19 @@ func TestSimplePutString(t *testing.T) {
 	if !b.Sequal("Hello, world!") {
 		t.Fatalf("FAIL! Not equal to 'Hello, world!', got '%s'", b.String())
 	}
+	var s string
+	b.GetString(&s, 5)
+	if s != "Hello" {
+		t.Fatalf("FAIL! GetString not equal to 'Hello'")
+	}
 }
 
 func TestRune(t *testing.T) {
-	b := Empty().PutString("世界!")
+	var os1 int
+	b := Empty().PutRune('世', &os1).PutString("界!")
+	if os1 != 3 {
+		t.Fatalf("First rune put mismatch: expected %d, got %d", 3, os1)
+	}
 	var r1, r2, r3 rune
 	var s1, s3 int
 	b.GetRune(&r1, &s1).GetRune(&r2, nil).GetRune(&r3, &s3)
@@ -116,33 +125,27 @@ func TestRune(t *testing.T) {
 	}
 }
 
-func TestPanicOnBadRune(t *testing.T) {
-	err := func() (err *ErrorInvalidRune) {
-		defer func() {
-			p := recover()
-			if p == nil {
-				err = nil
-				return
-			}
-			if ir, ok := p.(ErrorInvalidRune); ok {
-				err = &ir
-				return
-			}
-			err = nil
-			return
-		}()
-		Empty().PutRune(2000000000, nil)
-		return nil
+func TestPanics(t *testing.T) {
+	func() {
+		var r rune
+		var s int
+		defer catch(t, ErrInvalidRune)
+		Empty().PutByte(0xff).GetRune(&r, &s)
 	}()
-	if err == nil {
-		t.Fatalf("FAIL! Expected ErrorInvalidRune")
-	}
-	if *err != 2000000000 {
-		t.Fatalf("FAIL! Expected rune 2000000000, got %d", err)
-	}
-	if err.Error() != "Invalid rune: 2000000000" {
-		t.Fatalf("FAIL! Invalid error message: '%s'", err.Error())
-	}
+	func() {
+		defer catch(t, ErrorInvalidRune(2000000000))
+		Empty().PutRune(2000000000, nil)
+	}()
+	func() {
+		defer catch(t, ErrSliceEOF)
+		slice := make([]byte, 20)
+		Empty().Extend(10).GetSliceCopy(slice)
+	}()
+	func() {
+		defer catch(t, ErrSliceEOF)
+		var str string
+		Empty().Extend(10).GetString(&str, 20)
+	}()
 }
 
 func TestCloneZero(t *testing.T) {

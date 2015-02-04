@@ -1,5 +1,7 @@
 package bites
 
+import "bytes"
+
 // Read one byte, compare it to byt.
 // If it does not match, panic with ErrorExpectByte.
 func (b Bites) ExpectByte(byt byte) Bites {
@@ -24,9 +26,22 @@ func (b Bites) ExpectRune(r rune) Bites {
 	return b
 }
 
+// Try to read a slice as long as byt, and see if it matches.
+// If it does not, panic with ErrorExpectSlice.
+// If there is not enough to read the whole slice, panic with ErrSliceEOF.
+func (b Bites) ExpectSlice(byt []byte) Bites {
+	var slice []byte
+	b = b.GetSlice(&slice, len(byt))
+	if bytes.Compare(slice, byt) != 0 {
+		panic(ErrorExpectSlice{Exp: byt, Got: slice})
+	}
+	return b
+}
+
 // Try to read a string as long as s, and see if it matches.
 // If it does not, panic with ErrorExpectString.
-// If it panics, it also allocates, but otherwise it does not.
+// If it panics with this, it also allocates, but otherwise it does not.
+// If there is not enough to read the whole slice, panic with ErrSliceEOF.
 func (b Bites) ExpectString(s string) Bites {
 	var slice []byte
 	b = b.GetSlice(&slice, len(s))
