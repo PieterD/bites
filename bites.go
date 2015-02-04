@@ -5,6 +5,7 @@ import "bytes"
 // Bites' purpose is to give byte slices some useful methods.
 // The Put methods append things, and return the updated slice.
 // The Get methods snip things off the front, and return the remainder of the slice.
+// The Expect methods do a Get, and then compare it to the provided value. It it does not match, they panic.
 // The int methods are big-endian by default, but they have Little-Endian versions too.
 // The float and complex methods put them in the form of IEE754 binary representation.
 type Bites []byte

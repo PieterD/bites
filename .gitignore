@@ -1,4 +1,6 @@
 *.test
 *.prof
+prof
 *.cover
-*.swp
+cover
+.*.swp
