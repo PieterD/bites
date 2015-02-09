@@ -50,7 +50,7 @@ type ErrorExpectInt8 struct {
 }
 
 func (err ErrorExpectInt8) Error() string {
-	return fmt.Sprintf("Expected %s (%s), got (%s)", "int8", err.Exp, err.Got)
+	return fmt.Sprintf("Expected %s (%d), got (%d)", "int8", err.Exp, err.Got)
 }
 
 type ErrorExpectUint8 struct {
@@ -58,7 +58,7 @@ type ErrorExpectUint8 struct {
 }
 
 func (err ErrorExpectUint8) Error() string {
-	return fmt.Sprintf("Expected %s (%s), got (%s)", "uint8", err.Exp, err.Got)
+	return fmt.Sprintf("Expected %s (%d), got (%d)", "uint8", err.Exp, err.Got)
 }
 
 type ErrorExpectInt16 struct {
@@ -66,7 +66,7 @@ type ErrorExpectInt16 struct {
 }
 
 func (err ErrorExpectInt16) Error() string {
-	return fmt.Sprintf("Expected %s (%s), got (%s)", "int16", err.Exp, err.Got)
+	return fmt.Sprintf("Expected %s (%d), got (%d)", "int16", err.Exp, err.Got)
 }
 
 type ErrorExpectUint16 struct {
@@ -74,7 +74,7 @@ type ErrorExpectUint16 struct {
 }
 
 func (err ErrorExpectUint16) Error() string {
-	return fmt.Sprintf("Expected %s (%s), got (%s)", "uint16", err.Exp, err.Got)
+	return fmt.Sprintf("Expected %s (%d), got (%d)", "uint16", err.Exp, err.Got)
 }
 
 type ErrorExpectInt32 struct {
@@ -82,7 +82,7 @@ type ErrorExpectInt32 struct {
 }
 
 func (err ErrorExpectInt32) Error() string {
-	return fmt.Sprintf("Expected %s (%s), got (%s)", "int32", err.Exp, err.Got)
+	return fmt.Sprintf("Expected %s (%d), got (%d)", "int32", err.Exp, err.Got)
 }
 
 type ErrorExpectUint32 struct {
@@ -90,7 +90,7 @@ type ErrorExpectUint32 struct {
 }
 
 func (err ErrorExpectUint32) Error() string {
-	return fmt.Sprintf("Expected %s (%s), got (%s)", "uint32", err.Exp, err.Got)
+	return fmt.Sprintf("Expected %s (%d), got (%d)", "uint32", err.Exp, err.Got)
 }
 
 type ErrorExpectInt64 struct {
@@ -98,7 +98,7 @@ type ErrorExpectInt64 struct {
 }
 
 func (err ErrorExpectInt64) Error() string {
-	return fmt.Sprintf("Expected %s (%s), got (%s)", "int64", err.Exp, err.Got)
+	return fmt.Sprintf("Expected %s (%d), got (%d)", "int64", err.Exp, err.Got)
 }
 
 type ErrorExpectUint64 struct {
@@ -106,7 +106,7 @@ type ErrorExpectUint64 struct {
 }
 
 func (err ErrorExpectUint64) Error() string {
-	return fmt.Sprintf("Expected %s (%s), got (%s)", "uint64", err.Exp, err.Got)
+	return fmt.Sprintf("Expected %s (%d), got (%d)", "uint64", err.Exp, err.Got)
 }
 
 type ErrorExpectFloat32 struct {
@@ -114,7 +114,7 @@ type ErrorExpectFloat32 struct {
 }
 
 func (err ErrorExpectFloat32) Error() string {
-	return fmt.Sprintf("Expected %s (%s), got (%s)", "float32", err.Exp, err.Got)
+	return fmt.Sprintf("Expected %s (%f), got (%f)", "float32", err.Exp, err.Got)
 }
 
 type ErrorExpectFloat64 struct {
@@ -122,7 +122,7 @@ type ErrorExpectFloat64 struct {
 }
 
 func (err ErrorExpectFloat64) Error() string {
-	return fmt.Sprintf("Expected %s (%s), got (%s)", "float64", err.Exp, err.Got)
+	return fmt.Sprintf("Expected %s (%f), got (%f)", "float64", err.Exp, err.Got)
 }
 
 type ErrorExpectComplex64 struct {
@@ -130,7 +130,7 @@ type ErrorExpectComplex64 struct {
 }
 
 func (err ErrorExpectComplex64) Error() string {
-	return fmt.Sprintf("Expected %s (%s), got (%s)", "complex64", err.Exp, err.Got)
+	return fmt.Sprintf("Expected %s (%f), got (%f)", "complex64", err.Exp, err.Got)
 }
 
 type ErrorExpectComplex128 struct {
@@ -138,7 +138,7 @@ type ErrorExpectComplex128 struct {
 }
 
 func (err ErrorExpectComplex128) Error() string {
-	return fmt.Sprintf("Expected %s (%s), got (%s)", "complex128", err.Exp, err.Got)
+	return fmt.Sprintf("Expected %s (%f), got (%f)", "complex128", err.Exp, err.Got)
 }
 
 type ErrorExpectVarInt struct {
@@ -146,7 +146,7 @@ type ErrorExpectVarInt struct {
 }
 
 func (err ErrorExpectVarInt) Error() string {
-	return fmt.Sprintf("Expected %s (%s), got (%s)", "varint", err.Exp, err.Got)
+	return fmt.Sprintf("Expected %s (%d), got (%d)", "varint", err.Exp, err.Got)
 }
 
 type ErrorExpectVarUint struct {
@@ -154,5 +154,5 @@ type ErrorExpectVarUint struct {
 }
 
 func (err ErrorExpectVarUint) Error() string {
-	return fmt.Sprintf("Expected %s (%s), got (%s)", "varuint", err.Exp, err.Got)
+	return fmt.Sprintf("Expected %s (%d), got (%d)", "varuint", err.Exp, err.Got)
 }
