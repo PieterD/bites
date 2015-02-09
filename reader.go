@@ -7,7 +7,7 @@ type Reader struct {
 	n int
 }
 
-func (b Bites) Reader() *Reader {
+func NewReader(b Bites) *Reader {
 	return &Reader{b: b}
 }
 

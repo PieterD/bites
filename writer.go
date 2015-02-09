@@ -5,7 +5,7 @@ type Writer struct {
 	n int
 }
 
-func (b Bites) Writer() *Writer {
+func NewWriter(b Bites) *Writer {
 	return &Writer{b: b}
 }
 
