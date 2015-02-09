@@ -23,7 +23,7 @@ func ExampleExpect() {
 	var qbyte byte
 	var hashcopy [32]byte
 	var str string
-	r := b.Skip(11).ExpectUint32(513).ExpectVarInt(912345).GetByte(&qbyte)
+	r := b.Skip(11).ExpectUint32(513).ExpectVarInt(912345, nil).GetByte(&qbyte)
 	r = r.GetSliceCopy(hashcopy[:]).GetString(&str, 7).ExpectString(" one")
 	fmt.Printf("%c %s\n", qbyte, str)
 	// Output: Q another
