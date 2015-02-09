@@ -162,18 +162,18 @@ func (b Bites) ExpectComplex128(expect complex128) Bites {
 	return b
 }
 
-func (b Bites) ExpectVarInt(expect int64) Bites {
+func (b Bites) ExpectVarInt(expect int64, size *int) Bites {
 	var i int64
-	b = b.GetVarInt(&i, nil)
+	b = b.GetVarInt(&i, size)
 	if i != expect {
 		panic(ErrorExpectVarInt{Exp: expect, Got: i})
 	}
 	return b
 }
 
-func (b Bites) ExpectVarUint(expect uint64) Bites {
+func (b Bites) ExpectVarUint(expect uint64, size *int) Bites {
 	var i uint64
-	b = b.GetVarUint(&i, nil)
+	b = b.GetVarUint(&i, size)
 	if i != expect {
 		panic(ErrorExpectVarUint{Exp: expect, Got: i})
 	}
