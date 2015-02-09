@@ -2,6 +2,7 @@ package bites
 
 import (
 	"reflect"
+	"strings"
 	"testing"
 )
 
@@ -24,5 +25,8 @@ func catch(t *testing.T, expect error) {
 	}
 	if expect.Error() != got.Error() {
 		t.Fatalf("Expected string %s, got %s", expect.Error(), got.Error())
+	}
+	if strings.ContainsAny(got.Error(), "%!") {
+		t.Fatalf("Error string contains %% or !: %s", got.Error())
 	}
 }

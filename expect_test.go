@@ -40,6 +40,93 @@ func TestExpectFail(t *testing.T) {
 		defer catch(t, ErrorExpectSlice{Exp: slice, Got: []byte("hello")})
 		Empty().PutString("hello world").ExpectSlice(slice)
 	}()
+
+	func() {
+		defer catch(t, ErrorExpectInt8{Exp: 1, Got: 2})
+		Empty().PutInt8(2).ExpectInt8(1)
+	}()
+	func() {
+		defer catch(t, ErrorExpectUint8{Exp: 1, Got: 2})
+		Empty().PutUint8(2).ExpectUint8(1)
+	}()
+
+	func() {
+		defer catch(t, ErrorExpectInt16{Exp: 1, Got: 2})
+		Empty().PutInt16(2).ExpectInt16(1)
+	}()
+	func() {
+		defer catch(t, ErrorExpectInt16{Exp: 1, Got: 2})
+		Empty().PutInt16LE(2).ExpectInt16LE(1)
+	}()
+	func() {
+		defer catch(t, ErrorExpectUint16{Exp: 1, Got: 2})
+		Empty().PutUint16(2).ExpectUint16(1)
+	}()
+	func() {
+		defer catch(t, ErrorExpectUint16{Exp: 1, Got: 2})
+		Empty().PutUint16LE(2).ExpectUint16LE(1)
+	}()
+
+	func() {
+		defer catch(t, ErrorExpectInt32{Exp: 1, Got: 2})
+		Empty().PutInt32(2).ExpectInt32(1)
+	}()
+	func() {
+		defer catch(t, ErrorExpectInt32{Exp: 1, Got: 2})
+		Empty().PutInt32LE(2).ExpectInt32LE(1)
+	}()
+	func() {
+		defer catch(t, ErrorExpectUint32{Exp: 1, Got: 2})
+		Empty().PutUint32(2).ExpectUint32(1)
+	}()
+	func() {
+		defer catch(t, ErrorExpectUint32{Exp: 1, Got: 2})
+		Empty().PutUint32LE(2).ExpectUint32LE(1)
+	}()
+
+	func() {
+		defer catch(t, ErrorExpectInt64{Exp: 1, Got: 2})
+		Empty().PutInt64(2).ExpectInt64(1)
+	}()
+	func() {
+		defer catch(t, ErrorExpectInt64{Exp: 1, Got: 2})
+		Empty().PutInt64LE(2).ExpectInt64LE(1)
+	}()
+	func() {
+		defer catch(t, ErrorExpectUint64{Exp: 1, Got: 2})
+		Empty().PutUint64(2).ExpectUint64(1)
+	}()
+	func() {
+		defer catch(t, ErrorExpectUint64{Exp: 1, Got: 2})
+		Empty().PutUint64LE(2).ExpectUint64LE(1)
+	}()
+
+	func() {
+		defer catch(t, ErrorExpectFloat32{Exp: 1, Got: 2})
+		Empty().PutFloat32(2).ExpectFloat32(1)
+	}()
+	func() {
+		defer catch(t, ErrorExpectFloat64{Exp: 1, Got: 2})
+		Empty().PutFloat64(2).ExpectFloat64(1)
+	}()
+
+	func() {
+		defer catch(t, ErrorExpectComplex64{Exp: 1, Got: 2})
+		Empty().PutComplex64(2).ExpectComplex64(1)
+	}()
+	func() {
+		defer catch(t, ErrorExpectComplex128{Exp: 1, Got: 2})
+		Empty().PutComplex128(2).ExpectComplex128(1)
+	}()
+
+	func() {
+		defer catch(t, ErrorExpectVarInt{Exp: 1, Got: 2})
+		Empty().PutVarInt(2, nil).ExpectVarInt(1, nil)
+	}()
+	func() {
+		defer catch(t, ErrorExpectVarUint{Exp: 1, Got: 2})
+		Empty().PutVarUint(2, nil).ExpectVarUint(1, nil)
+	}()
 }
 
 func TestExpectInts(t *testing.T) {
