@@ -45,7 +45,7 @@ func BenchmarkExtendLongReuse(b *testing.B) {
 }
 
 func BenchmarkEverything(b *testing.B) {
-	bts := Empty()
+	bts := New()
 	for i := 0; i < b.N; i++ {
 		bts = doStuff(bts, b)
 	}
@@ -56,7 +56,7 @@ type failer interface {
 }
 
 func TestEverything(t *testing.T) {
-	bts := Empty()
+	bts := New()
 	doStuff(bts, t)
 }
 

@@ -6,7 +6,7 @@ import (
 
 func TestVarint(t *testing.T) {
 	var s int
-	b := Empty().PutVarInt(1, &s)
+	b := New().PutVarInt(1, &s)
 	if len(b) != 1 || s != 1 {
 		t.Fatalf("Varint size mismatch: got %d, expect 1", s)
 	}

@@ -8,7 +8,7 @@ import (
 
 func ExampleStringOps() {
 	// Chain operations to construct your buffer.
-	b := bites.Empty().PutByte('H').PutRune('e', nil).PutString("llo ").PutSlice([]byte("world!"))
+	b := bites.New().PutByte('H').PutRune('e', nil).PutString("llo ").PutSlice([]byte("world!"))
 	fmt.Println(b.String())
 	// Output: Hello world!
 }
@@ -16,7 +16,7 @@ func ExampleStringOps() {
 func ExampleExpect() {
 	// Chain operations to construct your buffer.
 	var hash [32]byte
-	b := bites.Empty().PutString("some string").PutUint32(513).PutVar(912345)
+	b := bites.New().PutString("some string").PutUint32(513).PutVar(912345)
 	b = b.PutByte('Q').PutSlice(hash[:]).PutString("another one")
 
 	// Chain operations to read your buffer, using expect and get.

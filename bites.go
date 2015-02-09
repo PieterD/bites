@@ -15,7 +15,7 @@ const extendShortLen = 512
 var extendShort [extendShortLen]byte
 
 // Returns an empty slice.
-func Empty() Bites {
+func New() Bites {
 	return []byte{}
 }
 

@@ -31,8 +31,8 @@ func byteCopy(w io.ByteWriter, r io.ByteReader) (int, error) {
 }
 
 func TestReaderWriterCopy(t *testing.T) {
-	b1 := Empty().PutString("Hello, world!")
-	b2 := Empty().PutString("PFX ")
+	b1 := New().PutString("Hello, world!")
+	b2 := New().PutString("PFX ")
 	r := b1.Reader()
 	w := b2.Writer()
 	n, err := slowCopy(w, r)

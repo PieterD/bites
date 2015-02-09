@@ -3,7 +3,7 @@ package bites
 import "testing"
 
 func TestExpectByteRuneString(t *testing.T) {
-	b := Empty().PutString("Hello 世!")
+	b := New().PutString("Hello 世!")
 	b = b.ExpectByte('H').ExpectRune('e').ExpectString("llo ").ExpectRune('世').ExpectByte('!')
 	if len(b) != 0 {
 		t.Fatalf("FAIL! Expects did not consume the whole string")
@@ -12,7 +12,7 @@ func TestExpectByteRuneString(t *testing.T) {
 
 func TestExpectByteSlice(t *testing.T) {
 	slice := []byte("Hello")
-	b := Empty().PutString("Hello world").ExpectSlice(slice)
+	b := New().PutString("Hello world").ExpectSlice(slice)
 	if len(b) != 6 {
 		t.Fatalf("FAIL! ExpectSlice consumed the wrong amount")
 	}
@@ -21,116 +21,116 @@ func TestExpectByteSlice(t *testing.T) {
 func TestExpectFail(t *testing.T) {
 	func() {
 		defer catch(t, ErrorExpectByte{Exp: 'M', Got: 'm'})
-		Empty().PutString("moo").ExpectByte('M')
+		New().PutString("moo").ExpectByte('M')
 	}()
 	func() {
 		defer catch(t, ErrorExpectRune{Exp: 'M', Got: 'm'})
-		Empty().PutString("moo").ExpectRune('M')
+		New().PutString("moo").ExpectRune('M')
 	}()
 	func() {
 		defer catch(t, ErrorExpectString{Exp: "Str", Got: "str"})
-		Empty().PutString("string").ExpectString("Str")
+		New().PutString("string").ExpectString("Str")
 	}()
 	func() {
 		defer catch(t, ErrSliceEOF)
-		Empty().PutString("str").ExpectString("String")
+		New().PutString("str").ExpectString("String")
 	}()
 	func() {
 		slice := []byte("Hello")
 		defer catch(t, ErrorExpectSlice{Exp: slice, Got: []byte("hello")})
-		Empty().PutString("hello world").ExpectSlice(slice)
+		New().PutString("hello world").ExpectSlice(slice)
 	}()
 
 	func() {
 		defer catch(t, ErrorExpectInt8{Exp: 1, Got: 2})
-		Empty().PutInt8(2).ExpectInt8(1)
+		New().PutInt8(2).ExpectInt8(1)
 	}()
 	func() {
 		defer catch(t, ErrorExpectUint8{Exp: 1, Got: 2})
-		Empty().PutUint8(2).ExpectUint8(1)
+		New().PutUint8(2).ExpectUint8(1)
 	}()
 
 	func() {
 		defer catch(t, ErrorExpectInt16{Exp: 1, Got: 2})
-		Empty().PutInt16(2).ExpectInt16(1)
+		New().PutInt16(2).ExpectInt16(1)
 	}()
 	func() {
 		defer catch(t, ErrorExpectInt16{Exp: 1, Got: 2})
-		Empty().PutInt16LE(2).ExpectInt16LE(1)
+		New().PutInt16LE(2).ExpectInt16LE(1)
 	}()
 	func() {
 		defer catch(t, ErrorExpectUint16{Exp: 1, Got: 2})
-		Empty().PutUint16(2).ExpectUint16(1)
+		New().PutUint16(2).ExpectUint16(1)
 	}()
 	func() {
 		defer catch(t, ErrorExpectUint16{Exp: 1, Got: 2})
-		Empty().PutUint16LE(2).ExpectUint16LE(1)
+		New().PutUint16LE(2).ExpectUint16LE(1)
 	}()
 
 	func() {
 		defer catch(t, ErrorExpectInt32{Exp: 1, Got: 2})
-		Empty().PutInt32(2).ExpectInt32(1)
+		New().PutInt32(2).ExpectInt32(1)
 	}()
 	func() {
 		defer catch(t, ErrorExpectInt32{Exp: 1, Got: 2})
-		Empty().PutInt32LE(2).ExpectInt32LE(1)
+		New().PutInt32LE(2).ExpectInt32LE(1)
 	}()
 	func() {
 		defer catch(t, ErrorExpectUint32{Exp: 1, Got: 2})
-		Empty().PutUint32(2).ExpectUint32(1)
+		New().PutUint32(2).ExpectUint32(1)
 	}()
 	func() {
 		defer catch(t, ErrorExpectUint32{Exp: 1, Got: 2})
-		Empty().PutUint32LE(2).ExpectUint32LE(1)
+		New().PutUint32LE(2).ExpectUint32LE(1)
 	}()
 
 	func() {
 		defer catch(t, ErrorExpectInt64{Exp: 1, Got: 2})
-		Empty().PutInt64(2).ExpectInt64(1)
+		New().PutInt64(2).ExpectInt64(1)
 	}()
 	func() {
 		defer catch(t, ErrorExpectInt64{Exp: 1, Got: 2})
-		Empty().PutInt64LE(2).ExpectInt64LE(1)
+		New().PutInt64LE(2).ExpectInt64LE(1)
 	}()
 	func() {
 		defer catch(t, ErrorExpectUint64{Exp: 1, Got: 2})
-		Empty().PutUint64(2).ExpectUint64(1)
+		New().PutUint64(2).ExpectUint64(1)
 	}()
 	func() {
 		defer catch(t, ErrorExpectUint64{Exp: 1, Got: 2})
-		Empty().PutUint64LE(2).ExpectUint64LE(1)
+		New().PutUint64LE(2).ExpectUint64LE(1)
 	}()
 
 	func() {
 		defer catch(t, ErrorExpectFloat32{Exp: 1, Got: 2})
-		Empty().PutFloat32(2).ExpectFloat32(1)
+		New().PutFloat32(2).ExpectFloat32(1)
 	}()
 	func() {
 		defer catch(t, ErrorExpectFloat64{Exp: 1, Got: 2})
-		Empty().PutFloat64(2).ExpectFloat64(1)
+		New().PutFloat64(2).ExpectFloat64(1)
 	}()
 
 	func() {
 		defer catch(t, ErrorExpectComplex64{Exp: 1, Got: 2})
-		Empty().PutComplex64(2).ExpectComplex64(1)
+		New().PutComplex64(2).ExpectComplex64(1)
 	}()
 	func() {
 		defer catch(t, ErrorExpectComplex128{Exp: 1, Got: 2})
-		Empty().PutComplex128(2).ExpectComplex128(1)
+		New().PutComplex128(2).ExpectComplex128(1)
 	}()
 
 	func() {
 		defer catch(t, ErrorExpectVarInt{Exp: 1, Got: 2})
-		Empty().PutVarInt(2, nil).ExpectVarInt(1, nil)
+		New().PutVarInt(2, nil).ExpectVarInt(1, nil)
 	}()
 	func() {
 		defer catch(t, ErrorExpectVarUint{Exp: 1, Got: 2})
-		Empty().PutVarUint(2, nil).ExpectVarUint(1, nil)
+		New().PutVarUint(2, nil).ExpectVarUint(1, nil)
 	}()
 }
 
 func TestExpectInts(t *testing.T) {
-	b := Empty()
+	b := New()
 	b = b.PutInt8(-100).PutUint8(200)
 	b = b.PutInt16(30000).PutInt16LE(-30000).PutUint16(60000).PutUint16LE(50000)
 	b = b.PutInt32(2000000000).PutUint32(4000000000)
