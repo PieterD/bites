@@ -2,6 +2,22 @@ package bites
 
 import "fmt"
 
+// Recover from panic.
+// If it's an error, put it in *err.
+// If it's not an error, continue panicing.
+// If no panic was happening, do nothing.
+func Catch(err *error) {
+	i := recover()
+	if i == nil {
+		return
+	}
+	e, ok := i.(error)
+	if !ok {
+		panic(i)
+	}
+	*err = e
+}
+
 type ErrorInvalidRune rune
 
 func (err ErrorInvalidRune) Error() string {

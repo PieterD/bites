@@ -195,3 +195,30 @@ func TestBool(t *testing.T) {
 		t.Fatalf("FAIL! Bad booleans returned")
 	}
 }
+
+func TestCatch(t *testing.T) {
+	err := testNoError()
+	if err != nil {
+		t.Fatalf("Expected no error, got: %v", err)
+	}
+
+	func() {
+		defer func() {
+			i := recover()
+			if i == nil {
+				t.Fatalf("Expected a panic")
+			}
+		}()
+		err = testPanic()
+	}()
+}
+
+func testNoError() (err error) {
+	defer Catch(&err)
+	return nil
+}
+
+func testPanic() (err error) {
+	defer Catch(&err)
+	panic("string")
+}
