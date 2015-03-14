@@ -24,7 +24,7 @@ func (b Bites) ExpectBool(bools ...bool) Bites {
 	b = b.GetBool(bp...)
 	for i := range bools {
 		if bools[i] != bo[i] {
-			panic(ErrorExpectBool{nil, nil})
+			panic(ErrorExpectBool{Pos: i, Exp: bools[i], Got: bo[i]})
 		}
 	}
 	return b
