@@ -37,6 +37,14 @@ func (err ErrorExpectByte) Error() string {
 	return fmt.Sprintf("Expected %s (%d), got (%d)", "byte", err.Exp, err.Got)
 }
 
+type ErrorExpectBool struct {
+	Exp, Got []byte
+}
+
+func (err ErrorExpectBool) Error() string {
+	return fmt.Sprintf("Expected %s (%s), got (%s)", "byte", "bits", "bits")
+}
+
 type ErrorExpectRune struct {
 	Exp, Got rune
 }

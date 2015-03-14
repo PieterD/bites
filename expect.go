@@ -13,7 +13,22 @@ func (b Bites) ExpectByte(byt byte) Bites {
 	return b
 }
 
-//TODO: ExpectBool will require some work to turn bools to bool pointers.
+// Try to read a set of bools, and see if it matches.
+// See GetBool.
+func (b Bites) ExpectBool(bools ...bool) Bites {
+	bo := make([]bool, len(bools))
+	bp := make([]*bool, len(bools))
+	for i := range bp {
+		bp[i] = &bo[i]
+	}
+	b = b.GetBool(bp...)
+	for i := range bools {
+		if bools[i] != bo[i] {
+			panic(ErrorExpectBool{nil, nil})
+		}
+	}
+	return b
+}
 
 // Read one rune, compare it to byt.
 // If it does not match, panic with ErrorExpectRune.
