@@ -23,9 +23,13 @@ func TestExpectBool(t *testing.T) {
 	if len(b) != 2 {
 		t.Fatalf("FAIL! Expected size 2, got %d", len(b))
 	}
-	b = b.ExpectBool(true, false, false, true, true, false, false)
+	b = b.ExpectBool(true, false, false, true, true, false, false, true)
 	if len(b) != 1 {
 		t.Fatalf("Expected size 1, got %d", len(b))
+	}
+	b = b.ExpectBool(true, false, true)
+	if len(b) != 0 {
+		t.Fatalf("Expected size 0, got %d", len(b))
 	}
 }
 

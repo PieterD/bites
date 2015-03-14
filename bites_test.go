@@ -196,6 +196,24 @@ func TestBool(t *testing.T) {
 	}
 }
 
+func TestBoolBoundary(t *testing.T) {
+	b := New().PutBool(true, false, false, true, true, false, false, true)
+	if len(b) != 1 {
+		t.Fatalf("FAIL! Expected size 1, got %d", len(b))
+	}
+	if b[0] != 153 {
+		t.Fatalf("FAIL! Expected 153, got %d and %d", b[0])
+	}
+	var b1, b2, b3, b6, b7, b8 bool
+	b = b.GetBool(&b1, &b2, &b3, nil, nil, &b6, &b7, &b8)
+	if len(b) != 0 {
+		t.Fatalf("FAIL! GetBool didn't snip")
+	}
+	if b1 != true || b2 != false || b3 != false || b6 != false || b7 != false || b8 != true {
+		t.Fatalf("FAIL! Bad booleans returned")
+	}
+}
+
 func TestCatch(t *testing.T) {
 	err := testNoError()
 	if err != nil {

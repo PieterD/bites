@@ -19,7 +19,7 @@ func (b Bites) GetByte(byt *byte) Bites {
 // This means that if there is a single true given,
 // the byte appended will have the value 128.
 func (b Bites) PutBool(bools ...bool) Bites {
-	bytenum := len(bools)/8 + 1
+	bytenum := (len(bools)-1)/8 + 1
 	b = b.Extend(bytenum)
 	b.Last(bytenum).Zero()
 	bts := b.Last(bytenum)
@@ -38,7 +38,7 @@ func (b Bites) PutBool(bools ...bool) Bites {
 // The bools are interpreted as though they were written by PutBool.
 // If a bool is nil, that bit is skipped.
 func (b Bites) GetBool(bools ...*bool) Bites {
-	bytenum := len(bools)/8 + 1
+	bytenum := (len(bools)-1)/8 + 1
 	for i, bol := range bools {
 		v := b[i/8] >> uint(7-(i&7)) & 1
 		if bol != nil {
