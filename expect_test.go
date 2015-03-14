@@ -18,10 +18,25 @@ func TestExpectByteSlice(t *testing.T) {
 	}
 }
 
+func TestExpectBool(t *testing.T) {
+	b := New().PutBool(true, false, false, true, true, false, false, true, true, false, true)
+	if len(b) != 2 {
+		t.Fatalf("FAIL! Expected size 2, got %d", len(b))
+	}
+	b = b.ExpectBool(true, false, false, true, true, false, false)
+	if len(b) != 1 {
+		t.Fatalf("Expected size 1, got %d", len(b))
+	}
+}
+
 func TestExpectFail(t *testing.T) {
 	func() {
 		defer catch(t, ErrorExpectByte{Exp: 'M', Got: 'm'})
 		New().PutString("moo").ExpectByte('M')
+	}()
+	func() {
+		defer catch(t, ErrorExpectBool{Pos: 2, Exp: false, Got: true})
+		New().PutBool(true, false, true).ExpectBool(true, false, false)
 	}()
 	func() {
 		defer catch(t, ErrorExpectRune{Exp: 'M', Got: 'm'})
