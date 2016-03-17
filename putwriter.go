@@ -2,14 +2,14 @@ package bites
 
 // A (Byte)Writer that appends everything written to the given byte slice.
 type Writer struct {
-	b Bites
+	b Put
 	n int
 }
 
 // The byte slice provided here is merely as an option to re-use an existing
 // slice. When you're done writing to the Writer, call Bites to return an
 // updated slice.
-func NewWriter(b Bites) *Writer {
+func (b Put) NewWriter() *Writer {
 	return &Writer{b: b}
 }
 
@@ -34,6 +34,6 @@ func (w *Writer) Total() int {
 
 // Return the updated (possibly reallocated) byte slice,
 // containing everything written to the Writer.
-func (w *Writer) Bites() Bites {
+func (w *Writer) Bites() Put {
 	return w.b
 }

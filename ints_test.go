@@ -3,7 +3,7 @@ package bites
 import "testing"
 
 func TestBits8(t *testing.T) {
-	b := New().PutInt8(100).PutInt8(-100).PutUint8(100).PutUint8(200)
+	b := New().PutInt8(100).PutInt8(-100).PutUint8(100).PutUint8(200).Get()
 	if b[0] != 100 || b[1] != 256-100 || b[2] != 100 || b[3] != 200 {
 		t.Fatalf("Wrong put8 %v", b)
 	}
@@ -28,7 +28,7 @@ func TestBits8(t *testing.T) {
 }
 
 func TestBits16(t *testing.T) {
-	b := New().PutInt16LE(256).PutInt16(1).PutInt16LE(-500).PutUint16LE(256).PutUint16(1)
+	b := New().PutInt16LE(256).PutInt16(1).PutInt16LE(-500).PutUint16LE(256).PutUint16(1).Get()
 	if b[0] != 0 || b[1] != 1 {
 		t.Fatalf("Wrong put16: %#v", b)
 	}
@@ -69,7 +69,7 @@ func TestBits16(t *testing.T) {
 func TestBits32(t *testing.T) {
 	var s1 int32
 	var u1 uint32
-	New().PutInt32LE(1234567890).PutUint32LE(4123567890).GetInt32LE(&s1).GetUint32LE(&u1)
+	New().PutInt32LE(1234567890).PutUint32LE(4123567890).Get().GetInt32LE(&s1).GetUint32LE(&u1)
 	if s1 != 1234567890 {
 		t.Fatalf("Wrong Put/Get int32: %d", s1)
 	}
@@ -77,7 +77,7 @@ func TestBits32(t *testing.T) {
 		t.Fatalf("Wrong Put/Get uint32: %d", u1)
 	}
 
-	New().PutInt32(1234567890).PutUint32(4123567890).GetInt32(&s1).GetUint32(&u1)
+	New().PutInt32(1234567890).PutUint32(4123567890).Get().GetInt32(&s1).GetUint32(&u1)
 	if s1 != 1234567890 {
 		t.Fatalf("Wrong Put/Get int32: %d", s1)
 	}
@@ -89,7 +89,7 @@ func TestBits32(t *testing.T) {
 func TestBits64(t *testing.T) {
 	var s1 int64
 	var u1 uint64
-	New().PutInt64LE(1234567890987654321).PutUint64LE(4123567890).GetInt64LE(&s1).GetUint64LE(&u1)
+	New().PutInt64LE(1234567890987654321).PutUint64LE(4123567890).Get().GetInt64LE(&s1).GetUint64LE(&u1)
 	if s1 != 1234567890987654321 {
 		t.Fatalf("Wrong Put/Get int64: %d", s1)
 	}
@@ -97,7 +97,7 @@ func TestBits64(t *testing.T) {
 		t.Fatalf("Wrong Put/Get uint64: %d", u1)
 	}
 
-	New().PutInt64(1234567890).PutUint64(4123567890987654321).GetInt64(&s1).GetUint64(&u1)
+	New().PutInt64(1234567890).PutUint64(4123567890987654321).Get().GetInt64(&s1).GetUint64(&u1)
 	if s1 != 1234567890 {
 		t.Fatalf("Wrong Put/Get int64: %d", s1)
 	}
@@ -115,7 +115,7 @@ func TestFloat(t *testing.T) {
 	var r2 float32
 	var r3 complex64
 	var r4 complex128
-	b := New().PutFloat64(f1).PutFloat32(f2).PutComplex64(f3).PutComplex128(f4)
+	b := New().PutFloat64(f1).PutFloat32(f2).PutComplex64(f3).PutComplex128(f4).Get()
 	b.GetFloat64(&r1).GetFloat32(&r2).GetComplex64(&r3).GetComplex128(&r4)
 	if f1 != r1 || f2 != r2 {
 		t.Fatalf("Put/get float failed")

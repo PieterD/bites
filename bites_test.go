@@ -5,7 +5,7 @@ import (
 )
 
 func TestCapacity(t *testing.T) {
-	b := New()[0:0:0].Capacity(16)
+	b := Put(nil).Capacity(16)
 	if len(b) != 0 {
 		t.Fatalf("FAIL! Expected len 0, got %d", len(b))
 	}
@@ -30,7 +30,7 @@ func TestCapacity(t *testing.T) {
 }
 
 func TestExtendShort(t *testing.T) {
-	b := make(Bites, 50).Set(1)
+	b := make(Put, 50).Set(1)
 	for i := range b {
 		if b[i] != 1 {
 			t.Fatalf("FAIL! Set did not set everything")
@@ -48,7 +48,7 @@ func TestExtendShort(t *testing.T) {
 }
 
 func TestExtendMid(t *testing.T) {
-	b := make(Bites, 50).Set(1)
+	b := make(Put, 50).Set(1)
 	origcap := cap(b)
 	b = b.Reuse().Extend(500)
 	if cap(b) == origcap {
@@ -60,7 +60,7 @@ func TestExtendMid(t *testing.T) {
 }
 
 func TestExtendLong(t *testing.T) {
-	b := make(Bites, 50).Set(1)
+	b := make(Put, 50).Set(1)
 	origcap := cap(b)
 	b = b.Reuse().Extend(5000)
 	if cap(b) == origcap {
@@ -72,7 +72,7 @@ func TestExtendLong(t *testing.T) {
 }
 
 func TestSlicing(t *testing.T) {
-	b := New().PutString("0123456789")
+	b := Get("0123456789")
 	if b.Last(3).String() != "789" {
 		t.Fatalf("FAIL! Last 3 bytes should be 789, were %s", b.Last(3))
 	}
@@ -85,29 +85,21 @@ func TestSlicing(t *testing.T) {
 }
 
 func TestSimpleString(t *testing.T) {
-	b := New().PutString("Hello").PutByte(',').PutRune(' ', nil).PutSlice([]byte("world!"))
+	b := Put(nil).PutString("Hello").PutByte(',').PutRune(' ', nil).PutSlice([]byte("world!"))
 	if b.String() != "Hello, world!" {
 		t.Fatalf("FAIL! Expected 'Hello, world!', got '%s'", b.String())
-	}
-	if !b.Sequal("Hello, world!") {
-		t.Fatalf("FAIL! Not equal to 'Hello, world!', got '%s'", b.String())
-	}
-	var s string
-	b.GetString(&s, 5)
-	if s != "Hello" {
-		t.Fatalf("FAIL! GetString not equal to 'Hello'")
 	}
 }
 
 func TestRune(t *testing.T) {
 	var os1 int
-	b := New().PutRune('世', &os1).PutString("界!")
+	b := Put(nil).PutRune('世', &os1).PutString("界!")
 	if os1 != 3 {
 		t.Fatalf("First rune put mismatch: expected %d, got %d", 3, os1)
 	}
 	var r1, r2, r3 rune
 	var s1, s3 int
-	b.GetRune(&r1, &s1).GetRune(&r2, nil).GetRune(&r3, &s3)
+	b.Get().GetRune(&r1, &s1).GetRune(&r2, nil).GetRune(&r3, &s3)
 	if r1 != '世' {
 		t.Fatalf("First rune mismatch: expected %d, got %d", '世', r1)
 	}
@@ -125,31 +117,8 @@ func TestRune(t *testing.T) {
 	}
 }
 
-func TestPanics(t *testing.T) {
-	func() {
-		var r rune
-		var s int
-		defer catch(t, ErrInvalidRune)
-		New().PutByte(0xff).GetRune(&r, &s)
-	}()
-	func() {
-		defer catch(t, ErrorInvalidRune(2000000000))
-		New().PutRune(2000000000, nil)
-	}()
-	func() {
-		defer catch(t, ErrSliceEOF)
-		slice := make([]byte, 20)
-		New().Extend(10).GetSliceCopy(slice)
-	}()
-	func() {
-		defer catch(t, ErrSliceEOF)
-		var str string
-		New().Extend(10).GetString(&str, 20)
-	}()
-}
-
 func TestCloneZero(t *testing.T) {
-	b1 := New().PutString("Hello")
+	b1 := Put(nil).PutString("Hello")
 	b2 := b1.Clone()
 	b1 = b1.Reuse().PutString("moo")
 	if b2.String() != "Hello" {
@@ -169,7 +138,7 @@ func TestCloneZero(t *testing.T) {
 }
 
 func TestSplit(t *testing.T) {
-	b1, b2 := New().PutString("123987654").Split(3)
+	b1, b2 := Put(nil).PutString("123987654").Get().Split(3)
 	if b1.String() != "123" {
 		t.Fatalf("FAIL! First part of split is wrong, expected '123' got %d", b1.String())
 	}
@@ -179,7 +148,7 @@ func TestSplit(t *testing.T) {
 }
 
 func TestBool(t *testing.T) {
-	b := New().PutBool(true, false, false, true, true, false, false, true, true, false, true)
+	b := Put(nil).PutBool(true, false, false, true, true, false, false, true, true, false, true)
 	if len(b) != 2 {
 		t.Fatalf("FAIL! Expected size 2, got %d", len(b))
 	}
@@ -187,8 +156,8 @@ func TestBool(t *testing.T) {
 		t.Fatalf("FAIL! Expected 153 and 160, got %d and %d", b[0], b[1])
 	}
 	var b1, b2, b3, b6, b7, b8, b9, b10, b11 bool
-	b = b.GetBool(&b1, &b2, &b3, nil, nil, &b6, &b7, &b8, &b9, &b10, &b11)
-	if len(b) != 0 {
+	after := b.Get().GetBool(&b1, &b2, &b3, nil, nil, &b6, &b7, &b8, &b9, &b10, &b11)
+	if len(after) != 0 {
 		t.Fatalf("FAIL! GetBool didn't snip")
 	}
 	if b1 != true || b2 != false || b3 != false || b6 != false || b7 != false || b8 != true || b9 != true || b10 != false || b11 != true {
@@ -197,7 +166,7 @@ func TestBool(t *testing.T) {
 }
 
 func TestBoolBoundary(t *testing.T) {
-	b := New().PutBool(true, false, false, true, true, false, false, true)
+	b := Put(nil).PutBool(true, false, false, true, true, false, false, true)
 	if len(b) != 1 {
 		t.Fatalf("FAIL! Expected size 1, got %d", len(b))
 	}
@@ -205,38 +174,11 @@ func TestBoolBoundary(t *testing.T) {
 		t.Fatalf("FAIL! Expected 153, got %d and %d", b[0])
 	}
 	var b1, b2, b3, b6, b7, b8 bool
-	b = b.GetBool(&b1, &b2, &b3, nil, nil, &b6, &b7, &b8)
-	if len(b) != 0 {
+	after := b.Get().GetBool(&b1, &b2, &b3, nil, nil, &b6, &b7, &b8)
+	if len(after) != 0 {
 		t.Fatalf("FAIL! GetBool didn't snip")
 	}
 	if b1 != true || b2 != false || b3 != false || b6 != false || b7 != false || b8 != true {
 		t.Fatalf("FAIL! Bad booleans returned")
 	}
-}
-
-func TestCatch(t *testing.T) {
-	err := testNoError()
-	if err != nil {
-		t.Fatalf("Expected no error, got: %v", err)
-	}
-
-	func() {
-		defer func() {
-			i := recover()
-			if i == nil {
-				t.Fatalf("Expected a panic")
-			}
-		}()
-		err = testPanic()
-	}()
-}
-
-func testNoError() (err error) {
-	defer Catch(&err)
-	return nil
-}
-
-func testPanic() (err error) {
-	defer Catch(&err)
-	panic("string")
 }

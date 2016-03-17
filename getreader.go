@@ -4,12 +4,12 @@ import "io"
 
 // A (Byte)Reader that reads everything contained in the given byte slice.
 type Reader struct {
-	b Bites
+	b Get
 	n int
 }
 
 // A Reader returned by this will allow you to Read everything in the given byte slice.
-func NewReader(b Bites) *Reader {
+func (b Get) NewReader() *Reader {
 	return &Reader{b: b}
 }
 

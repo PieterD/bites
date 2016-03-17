@@ -4,13 +4,13 @@ import "testing"
 
 func BenchmarkExtendShort(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		bts := make(Bites, 50)
+		bts := make(Put, 50)
 		bts = bts.Reuse().Extend(40)
 	}
 }
 
 func BenchmarkExtendShortReuse(b *testing.B) {
-	bts := make(Bites, 50)
+	bts := make(Put, 50)
 	for i := 0; i < b.N; i++ {
 		bts = bts.Reuse().Extend(40)
 	}
@@ -18,13 +18,13 @@ func BenchmarkExtendShortReuse(b *testing.B) {
 
 func BenchmarkExtendMid(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		bts := make(Bites, 50)
+		bts := make(Put, 50)
 		bts = bts.Reuse().Extend(400)
 	}
 }
 
 func BenchmarkExtendMidReuse(b *testing.B) {
-	bts := make(Bites, 50)
+	bts := make(Put, 50)
 	for i := 0; i < b.N; i++ {
 		bts = bts.Reuse().Extend(400)
 	}
@@ -32,22 +32,23 @@ func BenchmarkExtendMidReuse(b *testing.B) {
 
 func BenchmarkExtendLong(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		bts := make(Bites, 50)
+		bts := make(Put, 50)
 		bts = bts.Reuse().Extend(4000)
 	}
 }
 
 func BenchmarkExtendLongReuse(b *testing.B) {
-	bts := make(Bites, 50)
+	bts := make(Put, 50)
 	for i := 0; i < b.N; i++ {
 		bts = bts.Reuse().Extend(4000)
 	}
 }
 
 func BenchmarkEverything(b *testing.B) {
-	bts := New()
+	bts := Put(nil)
 	for i := 0; i < b.N; i++ {
-		bts = doStuff(bts, b)
+		bts = putStuff(bts, b)
+		getStuff(Get(bts), b)
 	}
 }
 
@@ -56,13 +57,14 @@ type failer interface {
 }
 
 func TestEverything(t *testing.T) {
-	bts := New()
-	doStuff(bts, t)
+	bts := Put(nil)
+	bts = putStuff(bts, t)
+	getStuff(Get(bts), t)
 }
 
-func doStuff(bts Bites, f failer) Bites {
+func putStuff(bts Put, f failer) Put {
 	var hash [32]byte
-	//return bts.Reuse().PutString("hello").PutSlice(hash[:]).PutByte(4).PutByte(4).PutVar(5)
+
 	bts = bts.Reuse()
 	bts = bts.PutString("hello")
 	bts = bts.PutSlice(hash[:])
@@ -82,8 +84,11 @@ func doStuff(bts Bites, f failer) Bites {
 	bts = bts.PutComplex64(987.654 + 123.456i)
 	bts = bts.PutComplex128(123.456 + 987.654i)
 
-	rv := bts
+	return bts
+}
 
+func getStuff(bts Get, f failer) {
+	var hash [32]byte
 	var helloSlice []byte
 	var b1, b2 byte
 	var s16 int16
@@ -154,5 +159,4 @@ func doStuff(bts Bites, f failer) Bites {
 	if c128 != 123.456+987.654i {
 		f.Fail()
 	}
-	return rv
 }

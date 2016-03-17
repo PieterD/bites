@@ -31,10 +31,10 @@ func byteCopy(w io.ByteWriter, r io.ByteReader) (int, error) {
 }
 
 func TestReaderWriterCopy(t *testing.T) {
-	b1 := New().PutString("Hello, world!")
+	b1 := New().PutString("Hello, world!").Get()
 	b2 := New().PutString("PFX ")
-	r := NewReader(b1)
-	w := NewWriter(b2)
+	r := b1.NewReader()
+	w := b2.NewWriter()
 	n, err := slowCopy(w, r)
 	b2 = w.Bites()
 	if n != len("Hello, world!") {
@@ -50,10 +50,10 @@ func TestReaderWriterCopy(t *testing.T) {
 		t.Fatalf("FAIL! Wrong string after copy append: '%s'", b2.String())
 	}
 
-	r = NewReader(b2)
-	w = NewWriter(b1)
+	r = b2.Get().NewReader()
+	w = b1.Put().NewWriter()
 	n, err = byteCopy(w, r)
-	b1 = w.Bites()
+	b := w.Bites()
 	if n != len("PFX Hello, world!") {
 		t.Fatalf("FAIL! Wrong copy length %d", n)
 	}
@@ -63,7 +63,7 @@ func TestReaderWriterCopy(t *testing.T) {
 	if err != nil {
 		t.Fatalf("FAIL! Unexpected error %v", err)
 	}
-	if b1.String() != "Hello, world!PFX Hello, world!" {
+	if b.String() != "Hello, world!PFX Hello, world!" {
 		t.Fatalf("FAIL! Wrong string after copy append: '%s'", b1.String())
 	}
 }

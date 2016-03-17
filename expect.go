@@ -4,27 +4,33 @@ import "bytes"
 
 // Read one byte, compare it to byt.
 // If it does not match, panic with ErrorExpectByte.
-func (b Bites) ExpectByte(byt byte) Bites {
+func (b Get) ExpectByte(byt byte) Get {
 	var bp byte
 	b = b.GetByte(&bp)
+	if b.Error() {
+		return nil
+	}
 	if bp != byt {
-		panic(ErrorExpectByte{Exp: byt, Got: bp})
+		return nil
 	}
 	return b
 }
 
 // Try to read a set of bools, and see if it matches.
 // See GetBool.
-func (b Bites) ExpectBool(bools ...bool) Bites {
+func (b Get) ExpectBool(bools ...bool) Get {
 	bo := make([]bool, len(bools))
 	bp := make([]*bool, len(bools))
 	for i := range bp {
 		bp[i] = &bo[i]
 	}
 	b = b.GetBool(bp...)
+	if b.Error() {
+		return nil
+	}
 	for i := range bools {
 		if bools[i] != bo[i] {
-			panic(ErrorExpectBool{Pos: i, Exp: bools[i], Got: bo[i]})
+			return nil
 		}
 	}
 	return b
@@ -32,11 +38,14 @@ func (b Bites) ExpectBool(bools ...bool) Bites {
 
 // Read one rune, compare it to byt.
 // If it does not match, panic with ErrorExpectRune.
-func (b Bites) ExpectRune(r rune) Bites {
+func (b Get) ExpectRune(r rune) Get {
 	var rp rune
 	b = b.GetRune(&rp, nil)
+	if b.Error() {
+		return nil
+	}
 	if rp != r {
-		panic(ErrorExpectRune{Exp: r, Got: rp})
+		return nil
 	}
 	return b
 }
@@ -44,11 +53,14 @@ func (b Bites) ExpectRune(r rune) Bites {
 // Try to read a slice as long as byt, and see if it matches.
 // If it does not, panic with ErrorExpectSlice.
 // If there is not enough to read the whole slice, panic with ErrSliceEOF.
-func (b Bites) ExpectSlice(byt []byte) Bites {
+func (b Get) ExpectSlice(byt []byte) Get {
 	var slice []byte
 	b = b.GetSlice(&slice, len(byt))
+	if b.Error() {
+		return nil
+	}
 	if bytes.Compare(slice, byt) != 0 {
-		panic(ErrorExpectSlice{Exp: byt, Got: slice})
+		return nil
 	}
 	return b
 }
@@ -57,11 +69,14 @@ func (b Bites) ExpectSlice(byt []byte) Bites {
 // If it does not, panic with ErrorExpectString.
 // If it panics with this, it also allocates, but otherwise it does not.
 // If there is not enough to read the whole slice, panic with ErrSliceEOF.
-func (b Bites) ExpectString(s string) Bites {
+func (b Get) ExpectString(s string) Get {
 	var slice []byte
 	b = b.GetSlice(&slice, len(s))
+	if b.Error() {
+		return nil
+	}
 	if !equalByteString(slice, s) {
-		panic(ErrorExpectString{Exp: s, Got: string(slice)})
+		return nil
 	}
 	return b
 }
