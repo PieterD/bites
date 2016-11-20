@@ -76,7 +76,7 @@ func (b Get) GetBool(bools ...*bool) Get {
 }
 
 // Get the first UTF8 rune in b.
-// If the rune is not valid UTF8 or b is empty, it panics with ErrInvalidRune.
+// If the rune is not valid UTF8 or b is empty, it returns nil.
 func (b Get) GetRune(r *rune, s *int) Get {
 	char, size := utf8.DecodeRune(b)
 	if char == utf8.RuneError && (size == 0 || size == 1) {
@@ -99,7 +99,7 @@ func (b Get) GetSlice(slice *[]byte, size int) Get {
 }
 
 // Copy b to slice, and return what's left of b.
-// If there's not enough in b to fill the slice, panic with ErrSliceEOF.
+// If there's not enough in b to fill the slice, return nil.
 func (b Get) GetSliceCopy(slice []byte) Get {
 	if !b.Space(len(slice)) {
 		return nil
@@ -110,7 +110,7 @@ func (b Get) GetSliceCopy(slice []byte) Get {
 
 // Get a string of the given size.
 // This allocates.
-// If there's not enough in b to read the full string, panic with ErrSliceEOF.
+// If there's not enough in b to read the full string, return nil.
 func (b Get) GetString(str *string, size int) Get {
 	if !b.Space(size) {
 		return nil
@@ -122,8 +122,14 @@ func (b Get) GetString(str *string, size int) Get {
 }
 
 // Return true if the slice is nil.
+// This is poorly named, use More instead.
 func (b Get) Error() bool {
 	return b == nil
+}
+
+// Return true if there is more data to get.
+func (b Get) More() bool {
+	return b.Len() > 0
 }
 
 // Return the length of the slice.
