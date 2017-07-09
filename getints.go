@@ -151,6 +151,9 @@ func (b Get) GetComplex128(f *complex128) Get {
 func (b Get) GetVarInt(i *int64, size *int) Get {
 	var s int
 	*i, s = binary.Varint(b)
+	if s == 0 {
+		return nil
+	}
 	if size != nil {
 		*size = s
 	}
@@ -160,8 +163,18 @@ func (b Get) GetVarInt(i *int64, size *int) Get {
 func (b Get) GetVarUint(i *uint64, size *int) Get {
 	var s int
 	*i, s = binary.Uvarint(b)
+	if s == 0 {
+		return nil
+	}
 	if size != nil {
 		*size = s
 	}
 	return b[s:]
+}
+
+func (b Get) GetVar(i *int) Get {
+	var ii int64
+	b = b.GetVarInt(&ii, nil)
+	*i = int(ii)
+	return b
 }

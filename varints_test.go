@@ -33,11 +33,11 @@ func TestVarint(t *testing.T) {
 
 	var i1, i2, i3 int64
 	var i4, i5 uint64
-	var i6 int64
-	var s1, s2, s3, s4, s5, s6 int
-	b.Get().GetVarInt(&i1, &s1).GetVarInt(&i2, &s2).GetVarInt(&i3, &s3).GetVarUint(&i4, &s4).GetVarUint(&i5, &s5).GetVarInt(&i6, &s6)
-	if s1 != 1 || s2 != 2 || s3 != 3 || s4 != 4 || s5 != 10 || s6 != 1 {
-		t.Fatalf("Invalid sizes %d %d %d %d %d %d", s1, s2, s3, s4, s5, s6)
+	var i6 int
+	var s1, s2, s3, s4, s5 int
+	b.Get().GetVarInt(&i1, &s1).GetVarInt(&i2, &s2).GetVarInt(&i3, &s3).GetVarUint(&i4, &s4).GetVarUint(&i5, &s5).GetVar(&i6)
+	if s1 != 1 || s2 != 2 || s3 != 3 || s4 != 4 || s5 != 10 {
+		t.Fatalf("Invalid sizes %d %d %d %d %d", s1, s2, s3, s4, s5)
 	}
 	if i1 != 1 || i2 != -200 || i3 != 12345 || i4 != 12345678 || i5 != 4000000000*4000000000 || i6 != 20 {
 		t.Fatalf("Invalid values")
